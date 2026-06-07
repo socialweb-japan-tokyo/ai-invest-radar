@@ -322,13 +322,13 @@ window.radarChartRef = new Chart(document.getElementById('radarChart'),{
 
 function fmtJpyCompact(v){
   if (v == null || isNaN(v)) return '—';
-  const abs = Math.abs(v);
-  if (abs >= 1e8) return '¥' + (v/1e8).toFixed(2) + '億';
-  if (abs >= 1e8) return '¥' + (v/1e8).toFixed(1) + '億';
-  if (abs >= 1e4) return '¥' + (v/1e4).toFixed(1) + '万';
-  return '¥' + Math.round(v).toLocaleString();
-}
-function fmtPct(v, plus){
+  const oku = v / 1e8;
+  const abs = Math.abs(oku);
+  if (abs >= 10000) return '¥' + Math.round(oku).toLocaleString() + '億';  // 1兆以上も億表記
+  if (abs >= 100) return '¥' + Math.round(oku).toLocaleString() + '億';
+  if (abs >= 1) return '¥' + oku.toFixed(1) + '億';
+  return '¥' + Math.round(v).toLocaleString() + '円';
+}function fmtPct(v, plus){
   if (v == null || isNaN(v)) return '—';
   const sign = (plus && v > 0) ? '+' : '';
   return sign + v.toFixed(2) + '%';

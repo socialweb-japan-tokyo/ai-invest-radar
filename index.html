@@ -298,9 +298,8 @@ window.perfChartRef = new Chart(document.getElementById('perfChart'),{
   type:'bar',
   data:{labels:['2021','2022','2023','2024','2025'],
     datasets:[
-      {label:'売上高(兆円)',data:[27.2,31.4,37.2,45.1,48.0],backgroundColor:'#3a3a3a',borderRadius:2,barPercentage:.7},
-      {label:'営業利益(兆円)',data:[2.2,3.0,2.7,5.3,5.1],backgroundColor:accent,borderRadius:2,barPercentage:.7}]},
-  options:{responsive:true,maintainAspectRatio:false,
+      {label:'売上高(億円)',data:[272000,314000,372000,451000,480000],backgroundColor:'#3a3a3a',borderRadius:2,barPercentage:.7},
+      {label:'営業利益(億円)',data:[22000,30000,27000,53000,51000],backgroundColor:accent,borderRadius:2,barPercentage:.7}]},  options:{responsive:true,maintainAspectRatio:false,
     plugins:{legend:{position:'top',align:'end',labels:{boxWidth:8,boxHeight:8,usePointStyle:true,pointStyle:'rect',padding:14,font:{size:11}}}},
     scales:{y:{grid:{color:grid,drawTicks:false},border:{display:false},ticks:{padding:8}},x:{grid:{display:false},border:{display:false}}}}
 });

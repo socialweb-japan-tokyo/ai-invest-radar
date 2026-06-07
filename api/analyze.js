@@ -1,6 +1,4 @@
-const Anthropic = require("@anthropic-ai/sdk");
-
-export default async function handler(req, res) {
+module.exports = async (req, res) => {
   try {
     const code = (req.query.code || "72030").toString();
     const headers = { "x-api-key": process.env.JQUANTS_API_KEY };
@@ -16,4 +14,5 @@ export default async function handler(req, res) {
     const num = v => (v === null || v === undefined || v === "" || isNaN(Number(v))) ? null : Number(v);
     const closePrice = num(price.AdjC ?? price.C);
     const eps = num(fin.EPS);
-    const s
+    const shares = num(fin.ShOutFY);
+    const tre

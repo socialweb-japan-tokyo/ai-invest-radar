@@ -80,7 +80,12 @@ module.exports = async (req, res) => {
     const finList = finJson.data || [];
     const priceList = priceJson.data || [];
     const fin = finList[finList.length - 1] || {};
-    const price = priceList[priceList.length - 1] || {};
+    // 配列の末尾から遡って、終値が入っている最新の日のデータを探す
+    let price = {};
+    for (let i = priceList.length - 1; i >= 0; i--) {
+      const p = priceList[i];
+      if (p && (p.AdjC != null || p.C != null)) { price = p; break; }
+    }
 
     const num = function(v) {
       if (v === null || v === undefined || v === "") return null;

@@ -1,4 +1,10 @@
-module.exports = async (req, res) => {
+return res.status(200).json({
+  _debug: {
+    totalCount: list.length,
+    keysAvailable: list[0] ? Object.keys(list[0]) : [],
+    firstSample: list[0] || null
+  }
+});module.exports = async (req, res) => {
   try {
     const apiKey = process.env.JQUANTS_API_KEY;
     const headers = { "x-api-key": apiKey };

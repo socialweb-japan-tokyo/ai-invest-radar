@@ -1,7 +1,76 @@
+// メモリキャッシュ（関数の再利用中は保持される）
+let companiesCache = null;
+let companiesCacheTime = 0;
+const CACHE_DURATION = 1000 * 60 * 60 * 24; // 24時間
+
+async function fetchCompanies(apiKey) {
+  const now = Date.now();
+  if (companiesCache && (now - companiesCacheTime) < CACHE_DURATION) {
+    return companiesCache;
+  }
+  const res = await fetch("https://api.jquants.com/v2/equities/master", {
+    headers: { "x-api-key": apiKey }
+  });
+  const json = await res.json();
+  companiesCache = json.data || [];
+  companiesCacheTime = now;
+  return companiesCache;
+}
+
+function resolveCode(query, companies) {
+  const q = query.trim();
+  // 数字だけなら証券コード扱い
+  if (/^\d{4,5}$/.test(q)) {
+    return q.length === 4 ? q + "0" : q;
+  }
+  // 完全一致を優先
+  const exact = companies.find(c => c.CoName === q || c.CoNameEn === q);
+  if (exact) return exact.Code;
+  // 前方一致
+  const startsWith = companies.find(c => c.CoName && c.CoName.startsWith(q));
+  if (startsWith) return startsWith.Code;
+  // 部分一致
+  const partial = companies.find(c => c.CoName && c.CoName.includes(q));
+  if (partial) return partial.Code;
+  // 英語名で部分一致
+  const enPartial = companies.find(c => c.CoNameEn && c.CoNameEn.toLowerCase().includes(q.toLowerCase()));
+  if (enPartial) return enPartial.Code;
+  return null;
+}
+
 module.exports = async (req, res) => {
   try {
-    const code = (req.query.code || "72030").toString();
-    const headers = { "x-api-key": process.env.JQUANTS_API_KEY };
+    const apiKey = process.env.JQUANTS_API_KEY;
+    const headers = { "x-api-key": apiKey };
+
+    // 銘柄リクエストに対応: ?list=1 を渡されたら銘柄一覧を返す
+    if (req.query.list) {
+      const companies = await fetchCompanies(apiKey);
+      const slim = companies.map(c => ({
+        code: c.Code, name: c.CoName, nameEn: c.CoNameEn, market: c.MktNm
+      }));
+      return res.status(200).json({ companies: slim });
+    }
+
+    // 通常の分析リクエスト
+    const query = (req.query.q || req.query.code || "トヨタ自動車").toString();
+    let code = null;
+    let resolvedName = null;
+
+    if (/^\d{4,5}$/.test(query.trim())) {
+      code = query.trim().length === 4 ? query.trim() + "0" : query.trim();
+    } else {
+      const companies = await fetchCompanies(apiKey);
+      code = resolveCode(query, companies);
+      if (code) {
+        const found = companies.find(c => c.Code === code);
+        if (found) resolvedName = found.CoName;
+      }
+    }
+
+    if (!code) {
+      return res.status(404).json({ error: "企業が見つかりませんでした: " + query });
+    }
 
     const finRes = await fetch("https://api.jquants.com/v2/fins/summary?code=" + code, { headers });
     const finJson = await finRes.json();
@@ -34,20 +103,14 @@ module.exports = async (req, res) => {
 
     const companyData = {
       code: code,
+      name: resolvedName || query,
       period: fin.CurPerType || null,
       price: closePrice,
-      per: per,
-      pbr: pbr,
-      divYield: divYield,
-      sales: num(fin.Sales),
-      op: num(fin.OP),
-      np: num(fin.NP),
+      per: per, pbr: pbr, divYield: divYield,
+      sales: num(fin.Sales), op: num(fin.OP), np: num(fin.NP),
       fSales: num(fin.FSales),
-      equity: equity,
-      equityRatio: num(fin.EqAR),
-      cfo: num(fin.CFO),
-      eps: eps,
-      divAnn: divAnn
+      equity: equity, equityRatio: num(fin.EqAR),
+      cfo: num(fin.CFO), eps: eps, divAnn: divAnn
     };
 
     const promptParts = [

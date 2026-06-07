@@ -7,12 +7,12 @@ module.exports = async (req, res) => {
     const q = (req.query.q || '').toString().trim();
     if (!q) return res.status(400).json({ error: 'クエリが空です' });
 
-    // ===== 1. 銘柄マスタ取得 =====
+    // ===== 1. 銘柄マスタ =====
     const masterRes = await fetch("https://api.jquants.com/v2/equities/master", { headers });
     if (!masterRes.ok) return res.status(500).json({ error: `マスタ取得失敗: ${masterRes.status}` });
     const list = (await masterRes.json()).data || [];
 
-    // ===== 2. 銘柄マッチング(揺らぎ吸収) =====
+    // ===== 2. マッチング =====
     const normalize = s => (s || "")
       .replace(/株式会社/g, "")
       .replace(/[（(]株[）)]/g, "")
@@ -34,38 +34,47 @@ module.exports = async (req, res) => {
     if (!company) return res.status(404).json({ error: `企業が見つかりませんでした: ${q}` });
 
     const code = company.Code;
+    const num = v => {
+      if (v == null || v === '') return null;
+      const n = Number(v);
+      return isNaN(n) ? null : n;
+    };
+    const pick = (obj, ...keys) => {
+      for (const k of keys) if (obj[k] != null && obj[k] !== '') return obj[k];
+      return null;
+    };
 
-    // ===== 3. 株価取得(直近400日) =====
-    const today = new Date();
-    const from = new Date(today.getTime() - 400 * 86400000);
-    const fmtD = d => d.toISOString().slice(0,10).replace(/-/g, '');
-    
-    let priceHistory = [], currentPrice = null, prevPrice = null;
+    // ===== 3. 株価(V2: /equities/bars/daily) =====
+    let priceHistory = [], currentPrice = null, prevPrice = null, _priceRaw = null;
     try {
       const pr = await fetch(
-        `https://api.jquants.com/v2/prices/daily_quotes?code=${code}&from=${fmtD(from)}&to=${fmtD(today)}`,
+        `https://api.jquants.com/v2/equities/bars/daily?code=${code}`,
         { headers }
       );
+      const ptxt = await pr.text();
+      _priceRaw = { status: pr.status, snippet: ptxt.slice(0, 200) };
       if (pr.ok) {
-        const pj = await pr.json();
-        const quotes = (pj.daily_quotes || pj.data || [])
-          .filter(x => (x.Close ?? x.AdjustmentClose) != null);
-        // 月末値抽出
+        const pj = JSON.parse(ptxt);
+        const arr = pj.data || pj.daily_quotes || [];
+        const norm = arr.map(x => ({
+          Date: x.Date || x.D,
+          close: num(pick(x, 'C', 'Close', 'AdjustmentClose'))
+        })).filter(x => x.Date && x.close != null)
+          .sort((a,b) => a.Date.localeCompare(b.Date));
+
+        // 月末値
         const byMonth = {};
-        for (const x of quotes) {
-          const m = (x.Date || '').slice(0,7);
-          const close = x.Close ?? x.AdjustmentClose;
-          if (!byMonth[m] || x.Date > byMonth[m].Date)
-            byMonth[m] = { Date: x.Date, close };
+        for (const x of norm) {
+          const m = x.Date.slice(0,7);
+          if (!byMonth[m] || x.Date > byMonth[m].Date) byMonth[m] = x;
         }
         const months = Object.keys(byMonth).sort().slice(-12);
         priceHistory = months.map(m => ({ month: m, close: byMonth[m].close }));
-        // 直近2日
-        const sorted = quotes.sort((a,b) => a.Date.localeCompare(b.Date));
-        if (sorted.length >= 1) currentPrice = sorted[sorted.length-1].Close ?? sorted[sorted.length-1].AdjustmentClose;
-        if (sorted.length >= 2) prevPrice = sorted[sorted.length-2].Close ?? sorted[sorted.length-2].AdjustmentClose;
+
+        if (norm.length >= 1) currentPrice = norm[norm.length-1].close;
+        if (norm.length >= 2) prevPrice = norm[norm.length-2].close;
       }
-    } catch (e) { /* 取れなくても続行 */ }
+    } catch (e) { _priceRaw = { error: e.message }; }
 
     let priceChange = null, priceChangePct = null;
     if (currentPrice != null && prevPrice != null) {
@@ -73,43 +82,42 @@ module.exports = async (req, res) => {
       priceChangePct = Math.round((priceChange / prevPrice) * 10000) / 100;
     }
 
-    // ===== 4. 財務取得 =====
-    let statements = [];
+    // ===== 4. 財務(V2: /fins/summary) =====
+    let statements = [], _finRaw = null;
     try {
       const sr = await fetch(
-        `https://api.jquants.com/v2/fins/statements?code=${code}`,
+        `https://api.jquants.com/v2/fins/summary?code=${code}`,
         { headers }
       );
+      const stxt = await sr.text();
+      _finRaw = { status: sr.status, snippet: stxt.slice(0, 200) };
       if (sr.ok) {
-        const sj = await sr.json();
-        statements = sj.statements || sj.data || [];
+        const sj = JSON.parse(stxt);
+        statements = sj.data || sj.statements || [];
       }
-    } catch (e) { /* 続行 */ }
-
-    const num = v => {
-      if (v == null || v === '') return null;
-      const n = Number(v);
-      return isNaN(n) ? null : n;
-    };
+    } catch (e) { _finRaw = { error: e.message }; }
 
     // 最新決算
-    const latest = [...statements]
-      .sort((a,b) => (b.DisclosedDate || '').localeCompare(a.DisclosedDate || ''))[0] || {};
+    const latest = [...statements].sort((a,b) =>
+      (pick(b, 'DisclosedDate', 'DiscDate', 'Date') || '').localeCompare(
+       pick(a, 'DisclosedDate', 'DiscDate', 'Date') || ''))[0] || {};
 
-    const netSales = num(latest.NetSales);
-    const opIncome = num(latest.OperatingProfit);
-    const netProfit = num(latest.Profit);
-    const eps = num(latest.EarningsPerShare);
-    const bps = num(latest.BookValuePerShare);
-    const equityRatio = num(latest.EquityToAssetRatio);
-    const fSales = num(latest.ForecastNetSales);
-    const divAnn = num(latest.ForecastDividendPerShareAnnual) ?? num(latest.ResultDividendPerShareAnnual);
-    const sharesOut = num(latest.NumberOfIssuedAndOutstandingSharesAtTheEndOfFiscalYearIncludingTreasuryStock);
-    const cfo = num(latest.CashFlowsFromOperatingActivities);
-    const equity = num(latest.Equity);
-    const totalAssets = num(latest.TotalAssets);
+    const netSales = num(pick(latest, 'NetSales', 'Sales', 'NS'));
+    const opIncome = num(pick(latest, 'OperatingProfit', 'OpProfit', 'OP'));
+    const netProfit = num(pick(latest, 'Profit', 'NetIncome', 'NP'));
+    const eps = num(pick(latest, 'EarningsPerShare', 'EPS'));
+    const bps = num(pick(latest, 'BookValuePerShare', 'BPS'));
+    const equityRatio = num(pick(latest, 'EquityToAssetRatio', 'EqRatio'));
+    const fSales = num(pick(latest, 'ForecastNetSales', 'FcstSales'));
+    const divAnn = num(pick(latest, 'ForecastDividendPerShareAnnual',
+      'ResultDividendPerShareAnnual', 'DPS'));
+    const sharesOut = num(pick(latest,
+      'NumberOfIssuedAndOutstandingSharesAtTheEndOfFiscalYearIncludingTreasuryStock',
+      'IssuedShares', 'Shares'));
+    const cfo = num(pick(latest, 'CashFlowsFromOperatingActivities', 'OpCF'));
+    const equity = num(pick(latest, 'Equity'));
+    const totalAssets = num(pick(latest, 'TotalAssets'));
 
-    // 計算項目
     const per = (currentPrice != null && eps && eps > 0) ? Math.round((currentPrice/eps)*10)/10 : null;
     const pbr = (currentPrice != null && bps && bps > 0) ? Math.round((currentPrice/bps)*100)/100 : null;
     const marketCap = (currentPrice != null && sharesOut) ? currentPrice * sharesOut : null;
@@ -119,15 +127,18 @@ module.exports = async (req, res) => {
     const roe = (netProfit != null && equity && equity > 0) ? Math.round((netProfit/equity)*1000)/10 : null;
     const roa = (netProfit != null && totalAssets && totalAssets > 0) ? Math.round((netProfit/totalAssets)*1000)/10 : null;
 
-    // 業績推移
     const perfHistory = statements
-      .filter(s => s.TypeOfCurrentPeriod === 'FY' || s.TypeOfCurrentPeriod === 'A')
-      .sort((a,b) => (a.CurrentPeriodEndDate || '').localeCompare(b.CurrentPeriodEndDate || ''))
+      .filter(s => {
+        const t = pick(s, 'TypeOfCurrentPeriod', 'PeriodType');
+        return t === 'FY' || t === 'A';
+      })
+      .sort((a,b) => (pick(a, 'CurrentPeriodEndDate', 'PeriodEnd') || '')
+        .localeCompare(pick(b, 'CurrentPeriodEndDate', 'PeriodEnd') || ''))
       .slice(-5)
       .map(s => ({
-        year: (s.CurrentPeriodEndDate || '').slice(0,4),
-        sales: num(s.NetSales),
-        op: num(s.OperatingProfit)
+        year: (pick(s, 'CurrentPeriodEndDate', 'PeriodEnd') || '').slice(0,4),
+        sales: num(pick(s, 'NetSales', 'Sales', 'NS')),
+        op: num(pick(s, 'OperatingProfit', 'OpProfit', 'OP'))
       }))
       .filter(p => p.year);
 
@@ -138,13 +149,13 @@ module.exports = async (req, res) => {
       if (p.op && c.op) opGrowth = Math.round(((c.op-p.op)/p.op)*1000)/10;
     }
 
-    // ===== 5. 同業ピア =====
+    // ===== 5. ピア =====
     const peers = list
       .filter(c => c.S33 === company.S33 && c.Code !== code && c.Mkt === '0111')
       .slice(0, 4)
       .map(p => ({ name: p.CoName, code: p.Code, per: null, roe: null, divYield: null }));
 
-    // ===== 6. AI簡易スコアリング =====
+    // ===== 6. スコア =====
     let score = 50;
     if (per != null && per < 15) score += 8;
     if (pbr != null && pbr < 1.5) score += 6;
@@ -156,43 +167,25 @@ module.exports = async (req, res) => {
 
     const verdict = score >= 75 ? 'strong_buy' : score >= 60 ? 'buy'
                   : score >= 45 ? 'hold' : score >= 30 ? 'sell' : 'strong_sell';
-
     const verdictTxt = { strong_buy:'中長期保有に強い妥当性', buy:'中長期保有に妥当性あり',
       hold:'現状維持を推奨', sell:'慎重な検討を推奨', strong_sell:'保有見直しを推奨' };
-    const comment = `${company.CoName}の主要財務指標を分析。AIスコア${score}点で、${verdictTxt[verdict]}と判断。`
-      + (per != null ? ` PER ${per}倍` : '') + (roe != null ? `・ROE ${roe}%` : '') + '。';
+    const comment = `${company.CoName}の主要財務指標を分析。AIスコア${score}点で、${verdictTxt[verdict]}と判断`
+      + (per != null ? ` (PER ${per}倍` : '') + (roe != null ? `、ROE ${roe}%` : '')
+      + (per != null || roe != null ? ')' : '') + '。';
 
     res.status(200).json({
       data: {
-        name: company.CoName,
-        code: company.Code,
-        nameEn: company.CoNameEn,
-        market: company.MktNm,
-        sector: company.S17Nm,
-        sector33: company.S33Nm,
-        period: latest.TypeOfCurrentPeriod || null,
-        price: currentPrice,
-        priceChange,
-        priceChangePct,
-        priceHistory,
-        marketCap,
-        per, pbr,
-        equityRatio,
-        roe, roa,
-        opMargin, cfo,
-        divYield, divAnn,
-        payoutRatio, eps,
-        salesGrowth, opGrowth,
-        fSales,
-        sales: netSales,
-        op: opIncome,
-        perfHistory,
-        peers
+        name: company.CoName, code: company.Code, nameEn: company.CoNameEn,
+        market: company.MktNm, sector: company.S17Nm, sector33: company.S33Nm,
+        period: pick(latest, 'TypeOfCurrentPeriod', 'PeriodType'),
+        price: currentPrice, priceChange, priceChangePct, priceHistory,
+        marketCap, per, pbr, equityRatio, roe, roa, opMargin, cfo,
+        divYield, divAnn, payoutRatio, eps,
+        salesGrowth, opGrowth, fSales,
+        sales: netSales, op: opIncome, perfHistory, peers
       },
       ai: {
-        verdict,
-        comment,
-        ai_score: score,
+        verdict, comment, ai_score: score,
         radar: {
           valuation: per != null ? Math.max(0, Math.min(100, 100 - per * 3)) : 50,
           growth: salesGrowth != null ? Math.max(0, Math.min(100, 50 + salesGrowth * 5)) : 50,
@@ -202,7 +195,8 @@ module.exports = async (req, res) => {
           stability: 70
         },
         peer_comment: `同セクター(${company.S33Nm})の主要企業との比較分析。`
-      }
+      },
+      _debug: { priceApi: _priceRaw, finApi: _finRaw, latestKeys: Object.keys(latest) }
     });
   } catch (e) {
     res.status(500).json({ error: e.message });

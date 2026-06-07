@@ -322,8 +322,7 @@ window.radarChartRef = new Chart(document.getElementById('radarChart'),{
 
 async function analyze(){
   const q = document.getElementById('q').value.trim();
-  const codeMap = { 'トヨタ自動車':'72030', 'トヨタ':'72030', '7203':'72030' };
-  const code = codeMap[q] || (q.match(/^\d{4,5}$/) ? (q.length===4 ? q+'0' : q) : '72030');
+  if (!q) { alert('企業名または証券コードを入力してください'); return; }
 
   const btn = document.querySelector('.search button');
   const old = btn.textContent;
@@ -331,12 +330,14 @@ async function analyze(){
   btn.disabled = true;
 
   try {
-    const res = await fetch('/api/analyze?code=' + code);
+    const res = await fetch('/api/analyze?q=' + encodeURIComponent(q));
     const json = await res.json();
+    if (json.error) throw new Error(json.error);
     if (!json.data || !json.ai) throw new Error('データ取得失敗');
 
     const d = json.data, ai = json.ai;
-    if (q) document.getElementById('cName').textContent = q;
+    if (d.name) document.getElementById('cName').textContent = d.name;
+    if (d.code) document.querySelector('.badge').textContent = d.code.slice(0,4);
     if (d.price) document.getElementById('cPrice').textContent = '¥' + d.price.toLocaleString();
     if (d.per != null) document.getElementById('cPer').textContent = d.per;
     if (d.pbr != null) document.getElementById('cPbr').textContent = d.pbr;
@@ -353,6 +354,7 @@ async function analyze(){
       window.radarChartRef.data.datasets[0].data = [
         r.valuation, r.growth, r.financial, r.profitability, r.dividend, r.stability
       ];
+      window.radarChartRef.data.datasets[0].label = d.name || 'AI分析';
       window.radarChartRef.update();
     }
   } catch (e) {

@@ -165,7 +165,7 @@
     <!-- 企業概要 -->
     <div class="card col-4">
       <h3>OVERVIEW <span class="jp">企業概要</span></h3>
-      <div class="mrow"><span class="k">時価総額 / Market Cap</span><span class="v" id="cMcap">¥46.2兆</span></div>
+      <div class="mrow"><span class="k">時価総額 / Market Cap</span><span class="v" id="cMcap">¥46.2億</span></div>
       <div class="mrow"><span class="k">市場区分 / Market</span><span class="v" id="cMarket">東証プライム</span></div>
       <div class="mrow"><span class="k">セクター(17)</span><span class="v" id="cSector">自動車</span></div>
       <div class="mrow"><span class="k">セクター(33)</span><span class="v" id="cSector33">輸送用機器</span></div>
@@ -203,7 +203,7 @@
       <div class="hbar"><div class="top"><span class="k">ROE</span><span class="v" id="cRoe">11.2%</span></div><div class="track"><div class="fill" id="cRoeBar" style="width:56%"></div></div></div>
       <div class="hbar"><div class="top"><span class="k">ROA</span><span class="v" id="cRoa">4.8%</span></div><div class="track"><div class="fill" id="cRoaBar" style="width:48%"></div></div></div>
       <div class="hbar"><div class="top"><span class="k">営業利益率</span><span class="v" id="cOpMargin">8.4%</span></div><div class="track"><div class="fill" id="cOpMarginBar" style="width:50%"></div></div></div>
-      <div class="hbar"><div class="top"><span class="k">営業CF（兆円）</span><span class="v" id="cCfo">3.8</span></div><div class="track"><div class="fill" id="cCfoBar" style="width:70%"></div></div></div>
+      <div class="hbar"><div class="top"><span class="k">営業CF（億円）</span><span class="v" id="cCfo">3.8</span></div><div class="track"><div class="fill" id="cCfoBar" style="width:70%"></div></div></div>
     </div>
 
     <!-- 配当情報 -->
@@ -223,9 +223,9 @@
       <h3>GROWTH <span class="jp">成長性分析</span></h3>
       <div class="mrow"><span class="k">売上成長率 YoY</span><span class="v" id="cSalesGrowth">+6.2%</span></div>
       <div class="mrow"><span class="k">営業利益成長率 YoY</span><span class="v" id="cOpGrowth">+9.1%</span></div>
-      <div class="mrow"><span class="k">通期売上予想</span><span class="v" id="cFSales">¥50兆</span></div>
-      <div class="mrow"><span class="k">当期売上累計</span><span class="v" id="cSales">¥38兆</span></div>
-      <div class="mrow"><span class="k">営業利益（累計）</span><span class="v" id="cOp">¥3.2兆</span></div>
+      <div class="mrow"><span class="k">通期売上予想</span><span class="v" id="cFSales">¥50億</span></div>
+      <div class="mrow"><span class="k">当期売上累計</span><span class="v" id="cSales">¥38億</span></div>
+      <div class="mrow"><span class="k">営業利益（累計）</span><span class="v" id="cOp">¥3.2億</span></div>
     </div>
 
     <!-- AI 投資レーダーチャート -->
@@ -323,7 +323,7 @@ window.radarChartRef = new Chart(document.getElementById('radarChart'),{
 function fmtJpyCompact(v){
   if (v == null || isNaN(v)) return '—';
   const abs = Math.abs(v);
-  if (abs >= 1e8) return '¥' + (v/1e8).toFixed(2) + '兆';
+  if (abs >= 1e8) return '¥' + (v/1e8).toFixed(2) + '億';
   if (abs >= 1e8) return '¥' + (v/1e8).toFixed(1) + '億';
   if (abs >= 1e4) return '¥' + (v/1e4).toFixed(1) + '万';
   return '¥' + Math.round(v).toLocaleString();

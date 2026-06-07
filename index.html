@@ -149,14 +149,14 @@
 
   <!-- company head -->
   <div class="chead">
-    <div class="badge">7203</div>
+    <div class="badge" id="cBadge">7203</div>
     <div>
       <h1 id="cName">トヨタ自動車</h1>
-      <div class="sub">東証プライム ・ 輸送用機器 ・ Toyota Motor Corporation</div>
+      <div class="sub" id="cSub">東証プライム ・ 輸送用機器 ・ Toyota Motor Corporation</div>
     </div>
     <div class="price">
       <div class="v" id="cPrice">¥2,847.5</div>
-      <div class="c">▲ +42.0 (+1.50%)</div>
+      <div class="c" id="cPriceChange">▲ +42.0 (+1.50%)</div>
     </div>
   </div>
 
@@ -171,11 +171,11 @@
     <!-- 企業概要 -->
     <div class="card col-4">
       <h3><span class="i">◆</span>企業概要</h3>
-      <div class="mrow"><span class="k">時価総額</span><span class="v">¥46.2兆</span></div>
-      <div class="mrow"><span class="k">設立</span><span class="v">1937年</span></div>
-      <div class="mrow"><span class="k">従業員数</span><span class="v">375,235</span></div>
-      <div class="mrow"><span class="k">セクター</span><span class="v">自動車</span></div>
-      <div class="mrow"><span class="k">本社</span><span class="v">愛知県豊田市</span></div>
+      <div class="mrow"><span class="k">時価総額</span><span class="v" id="cMcap">¥46.2兆</span></div>
+      <div class="mrow"><span class="k">市場区分</span><span class="v" id="cMarket">東証プライム</span></div>
+      <div class="mrow"><span class="k">セクター(17)</span><span class="v" id="cSector">自動車</span></div>
+      <div class="mrow"><span class="k">セクター(33)</span><span class="v" id="cSector33">輸送用機器</span></div>
+      <div class="mrow"><span class="k">決算期</span><span class="v" id="cPeriod">3Q</span></div>
     </div>
 
     <!-- 株価情報 -->
@@ -205,11 +205,11 @@
     <!-- 財務健全性 -->
     <div class="card col-4">
       <h3><span class="i">◆</span>財務健全性</h3>
-      <div class="hbar"><div class="top"><span class="k">自己資本比率</span><span class="v" id="cEqRatio">38.4%</span></div><div class="track"><div class="fill" style="width:77%"></div></div></div>
-      <div class="hbar"><div class="top"><span class="k">流動比率</span><span class="v">122%</span></div><div class="track"><div class="fill" style="width:68%"></div></div></div>
-      <div class="hbar"><div class="top"><span class="k">D/Eレシオ</span><span class="v">0.62</span></div><div class="track"><div class="fill" style="width:62%"></div></div></div>
-      <div class="hbar"><div class="top"><span class="k">ROE</span><span class="v">11.2%</span></div><div class="track"><div class="fill" style="width:56%"></div></div></div>
-      <div class="hbar"><div class="top"><span class="k">ROA</span><span class="v">4.8%</span></div><div class="track"><div class="fill" style="width:48%"></div></div></div>
+      <div class="hbar"><div class="top"><span class="k">自己資本比率</span><span class="v" id="cEqRatio">38.4%</span></div><div class="track"><div class="fill" id="cEqRatioBar" style="width:77%"></div></div></div>
+      <div class="hbar"><div class="top"><span class="k">ROE（自己資本利益率）</span><span class="v" id="cRoe">11.2%</span></div><div class="track"><div class="fill" id="cRoeBar" style="width:56%"></div></div></div>
+      <div class="hbar"><div class="top"><span class="k">ROA（総資産利益率）</span><span class="v" id="cRoa">4.8%</span></div><div class="track"><div class="fill" id="cRoaBar" style="width:48%"></div></div></div>
+      <div class="hbar"><div class="top"><span class="k">営業利益率</span><span class="v" id="cOpMargin">8.4%</span></div><div class="track"><div class="fill" id="cOpMarginBar" style="width:50%"></div></div></div>
+      <div class="hbar"><div class="top"><span class="k">営業CF（兆円）</span><span class="v" id="cCfo">3.8</span></div><div class="track"><div class="fill" id="cCfoBar" style="width:70%"></div></div></div>
     </div>
 
     <!-- 配当情報 -->
@@ -217,21 +217,21 @@
       <h3><span class="i">◆</span>配当情報</h3>
       <div class="tiles">
         <div class="tile"><div class="l">配当利回り</div><div class="v up"><span id="cDivYield">2.84</span><small>%</small></div></div>
-        <div class="tile"><div class="l">1株配当</div><div class="v">¥80</div></div>
-        <div class="tile"><div class="l">配当性向</div><div class="v">28<small>%</small></div></div>
-        <div class="tile"><div class="l">連続増配</div><div class="v">5<small>年</small></div></div>
+        <div class="tile"><div class="l">1株配当（予想年間）</div><div class="v">¥<span id="cDivAnn">80</span></div></div>
+        <div class="tile"><div class="l">配当性向</div><div class="v"><span id="cPayout">28</span><small>%</small></div></div>
+        <div class="tile"><div class="l">EPS（1株利益）</div><div class="v">¥<span id="cEps">232.5</span></div></div>
       </div>
-      <div class="ai-note"><div class="h">◈ AIコメント</div><p>配当性向に余裕があり、減配リスクは低い。安定したインカム狙いに適合。</p></div>
+      <div class="ai-note"><div class="h">◈ 配当ステータス</div><p id="cDivNote">配当性向に余裕があり、減配リスクは低い水準。安定したインカム狙いに適合。</p></div>
     </div>
 
     <!-- 成長性分析 -->
     <div class="card col-4">
       <h3><span class="i">◆</span>成長性分析</h3>
-      <div class="mrow"><span class="k">売上成長率（3年CAGR）</span><span class="v up">+6.2%</span></div>
-      <div class="mrow"><span class="k">利益成長率（3年CAGR）</span><span class="v up">+9.1%</span></div>
-      <div class="mrow"><span class="k">EPS成長率（予想）</span><span class="v up">+4.5%</span></div>
-      <div class="mrow"><span class="k">EV成長率</span><span class="v down">-1.2%</span></div>
-      <div class="mrow"><span class="k">研究開発費比率</span><span class="v">3.8%</span></div>
+      <div class="mrow"><span class="k">売上成長率（前期比FY）</span><span class="v" id="cSalesGrowth">+6.2%</span></div>
+      <div class="mrow"><span class="k">営業利益成長率（前期比FY）</span><span class="v" id="cOpGrowth">+9.1%</span></div>
+      <div class="mrow"><span class="k">通期売上予想</span><span class="v" id="cFSales">¥50兆</span></div>
+      <div class="mrow"><span class="k">当期売上累計</span><span class="v" id="cSales">¥38兆</span></div>
+      <div class="mrow"><span class="k">営業利益（累計）</span><span class="v" id="cOp">¥3.2兆</span></div>
     </div>
 
     <!-- AI 投資レーダーチャート -->
@@ -283,7 +283,7 @@ const cyan='#22d3ee', blue='#3b82f6', grid='rgba(120,180,255,0.08)', txt2='#8ea3
 Chart.defaults.font.family="'JetBrains Mono','Outfit',sans-serif";
 Chart.defaults.color=txt2;
 
-new Chart(document.getElementById('priceChart'),{
+window.priceChartRef = new Chart(document.getElementById('priceChart'),{
   type:'line',
   data:{labels:['7月','8月','9月','10月','11月','12月','1月','2月','3月','4月','5月','6月'],
     datasets:[{data:[2410,2380,2520,2490,2610,2580,2700,2680,2750,2790,2805,2847],
@@ -293,7 +293,7 @@ new Chart(document.getElementById('priceChart'),{
     scales:{y:{grid:{color:grid}},x:{grid:{display:false}}}}
 });
 
-new Chart(document.getElementById('perfChart'),{
+window.perfChartRef = new Chart(document.getElementById('perfChart'),{
   type:'bar',
   data:{labels:['2021','2022','2023','2024','2025'],
     datasets:[
@@ -320,6 +320,29 @@ window.radarChartRef = new Chart(document.getElementById('radarChart'),{
       ticks:{display:false,stepSize:20},min:0,max:100}}}
 });
 
+// 兆/億/万を自動で付ける数値整形
+function fmtJpyCompact(v){
+  if (v == null || isNaN(v)) return '—';
+  const abs = Math.abs(v);
+  if (abs >= 1e12) return '¥' + (v/1e12).toFixed(2) + '兆';
+  if (abs >= 1e8) return '¥' + (v/1e8).toFixed(1) + '億';
+  if (abs >= 1e4) return '¥' + (v/1e4).toFixed(1) + '万';
+  return '¥' + Math.round(v).toLocaleString();
+}
+function fmtPct(v, plus){
+  if (v == null || isNaN(v)) return '—';
+  const sign = (plus && v > 0) ? '+' : '';
+  return sign + v.toFixed(2) + '%';
+}
+function setText(id, val){
+  const el = document.getElementById(id);
+  if (el && val != null) el.textContent = val;
+}
+function setBar(id, ratio){
+  const el = document.getElementById(id);
+  if (el && ratio != null) el.style.width = Math.max(0, Math.min(100, ratio)) + '%';
+}
+
 async function analyze(){
   const q = document.getElementById('q').value.trim();
   if (!q) { alert('企業名または証券コードを入力してください'); return; }
@@ -336,19 +359,86 @@ async function analyze(){
     if (!json.data || !json.ai) throw new Error('データ取得失敗');
 
     const d = json.data, ai = json.ai;
-    if (d.name) document.getElementById('cName').textContent = d.name;
-    if (d.code) document.querySelector('.badge').textContent = d.code.slice(0,4);
-    if (d.price) document.getElementById('cPrice').textContent = '¥' + d.price.toLocaleString();
-    if (d.per != null) document.getElementById('cPer').textContent = d.per;
-    if (d.pbr != null) document.getElementById('cPbr').textContent = d.pbr;
-    if (d.divYield != null) document.getElementById('cDivYield').textContent = d.divYield;
-    if (d.equityRatio != null) document.getElementById('cEqRatio').textContent = (d.equityRatio*100).toFixed(1) + '%';
 
+    // ヘッダー
+    setText('cName', d.name);
+    if (d.code) setText('cBadge', d.code.slice(0,4));
+    const subParts = [d.market, d.sector33, d.nameEn].filter(Boolean);
+    if (subParts.length) setText('cSub', subParts.join(' ・ '));
+    if (d.price != null) setText('cPrice', '¥' + d.price.toLocaleString());
+    if (d.priceChange != null && d.priceChangePct != null) {
+      const arrow = d.priceChange >= 0 ? '▲' : '▼';
+      const sign = d.priceChange >= 0 ? '+' : '';
+      const cls = d.priceChange >= 0 ? 'up' : 'down';
+      const el = document.getElementById('cPriceChange');
+      if (el) {
+        el.textContent = arrow + ' ' + sign + d.priceChange + ' (' + sign + d.priceChangePct + '%)';
+        el.style.color = d.priceChange >= 0 ? 'var(--green)' : 'var(--red)';
+      }
+    } else {
+      setText('cPriceChange', '— (—)');
+    }
+
+    // 企業概要
+    setText('cMcap', d.marketCap != null ? fmtJpyCompact(d.marketCap) : '—');
+    setText('cMarket', d.market || '—');
+    setText('cSector', d.sector || '—');
+    setText('cSector33', d.sector33 || '—');
+    setText('cPeriod', d.period || '—');
+
+    // 割安度
+    setText('cPer', d.per != null ? d.per : '—');
+    setText('cPbr', d.pbr != null ? d.pbr : '—');
+
+    // 財務健全性
+    if (d.equityRatio != null) {
+      setText('cEqRatio', (d.equityRatio*100).toFixed(1) + '%');
+      setBar('cEqRatioBar', d.equityRatio * 100);
+    }
+    if (d.roe != null) {
+      setText('cRoe', d.roe + '%');
+      setBar('cRoeBar', d.roe * 5);
+    }
+    if (d.roa != null) {
+      setText('cRoa', d.roa + '%');
+      setBar('cRoaBar', d.roa * 8);
+    }
+    if (d.opMargin != null) {
+      setText('cOpMargin', d.opMargin + '%');
+      setBar('cOpMarginBar', d.opMargin * 3);
+    }
+    if (d.cfo != null) {
+      setText('cCfo', (d.cfo/1e12).toFixed(2));
+      setBar('cCfoBar', Math.log10(Math.max(1, d.cfo/1e9)) * 20);
+    }
+
+    // 配当
+    setText('cDivYield', d.divYield != null ? d.divYield : '—');
+    setText('cDivAnn', d.divAnn != null ? d.divAnn : '—');
+    setText('cPayout', d.payoutRatio != null ? d.payoutRatio : '—');
+    setText('cEps', d.eps != null ? d.eps : '—');
+    if (d.payoutRatio != null) {
+      const note = d.payoutRatio < 30 ? '配当性向に大きな余裕があり、減配リスクは極めて低い水準。'
+                : d.payoutRatio < 60 ? '配当性向は健全圏内。安定したインカム狙いに適合。'
+                : d.payoutRatio < 100 ? '配当性向はやや高め。業績悪化時は減配リスクに注意。'
+                : '配当性向が利益を超過。減配リスクが高い水準。';
+      setText('cDivNote', note);
+    }
+
+    // 成長性
+    setText('cSalesGrowth', d.salesGrowth != null ? fmtPct(d.salesGrowth, true) : '—（過去FYデータ不足）');
+    setText('cOpGrowth', d.opGrowth != null ? fmtPct(d.opGrowth, true) : '—（過去FYデータ不足）');
+    setText('cFSales', d.fSales != null ? fmtJpyCompact(d.fSales) : '—');
+    setText('cSales', d.sales != null ? fmtJpyCompact(d.sales) : '—');
+    setText('cOp', d.op != null ? fmtJpyCompact(d.op) : '—');
+
+    // AI判定
     const verdictMap = { strong_buy:'強い買い', buy:'やや買い', hold:'中立', sell:'やや売り', strong_sell:'売り' };
-    if (ai.verdict) document.getElementById('cVerdict').textContent = verdictMap[ai.verdict] || ai.verdict;
-    if (ai.comment) document.getElementById('cComment').textContent = ai.comment;
-    if (ai.ai_score != null) document.getElementById('cScore').textContent = ai.ai_score;
+    setText('cVerdict', verdictMap[ai.verdict] || ai.verdict || '—');
+    setText('cComment', ai.comment || '—');
+    setText('cScore', ai.ai_score != null ? ai.ai_score : '—');
 
+    // レーダーチャート
     if (window.radarChartRef && ai.radar) {
       const r = ai.radar;
       window.radarChartRef.data.datasets[0].data = [
@@ -356,6 +446,21 @@ async function analyze(){
       ];
       window.radarChartRef.data.datasets[0].label = d.name || 'AI分析';
       window.radarChartRef.update();
+    }
+
+    // 株価推移チャート（実データ）
+    if (window.priceChartRef && d.priceHistory && d.priceHistory.length) {
+      window.priceChartRef.data.labels = d.priceHistory.map(p => p.month.slice(5) + '月');
+      window.priceChartRef.data.datasets[0].data = d.priceHistory.map(p => p.close);
+      window.priceChartRef.update();
+    }
+
+    // 業績推移チャート（実データ）
+    if (window.perfChartRef && d.perfHistory && d.perfHistory.length) {
+      window.perfChartRef.data.labels = d.perfHistory.map(p => p.year || '');
+      window.perfChartRef.data.datasets[0].data = d.perfHistory.map(p => p.sales ? p.sales/1e12 : 0);
+      window.perfChartRef.data.datasets[1].data = d.perfHistory.map(p => p.op ? p.op/1e12 : 0);
+      window.perfChartRef.update();
     }
   } catch (e) {
     alert('分析エラー: ' + e.message);

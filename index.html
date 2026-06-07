@@ -30,7 +30,6 @@
   body{min-height:100vh;font-size:14px;line-height:1.5;letter-spacing:-0.005em}
   .wrap{max-width:1240px;margin:0 auto;padding:20px 24px 80px}
 
-  /* header */
   header{display:flex;align-items:center;gap:14px;padding:4px 0 32px;border-bottom:1px solid var(--border);margin-bottom:32px;padding-bottom:20px}
   .logo{display:flex;align-items:center;gap:10px;font-weight:600;font-size:15px;letter-spacing:-0.02em}
   .logo .dot{width:22px;height:22px;border-radius:6px;background:var(--txt);display:grid;place-items:center;font-size:12px;color:var(--bg);font-weight:700}
@@ -44,7 +43,6 @@
   .search button:hover{background:var(--bg-card);border-color:#3a3a3a}
   .search button:disabled{opacity:.5;cursor:default}
 
-  /* company head */
   .chead{display:flex;align-items:flex-end;gap:20px;margin-bottom:24px;flex-wrap:wrap}
   .chead .left{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
   .chead h1{font-size:40px;font-weight:600;letter-spacing:-0.03em;line-height:1.1}
@@ -58,15 +56,14 @@
   .chead .price .c.up{color:var(--accent)}
   .chead .price .c.down{color:var(--red)}
 
-  /* verdict bar */
   .verdict{display:flex;align-items:center;gap:20px;padding:16px 20px;border:1px solid var(--border);border-radius:10px;margin-bottom:24px;background:var(--bg-card)}
-  .verdict .tag{padding:4px 10px;border-radius:5px;font-weight:500;font-size:11px;letter-spacing:.04em;text-transform:uppercase;border:1px solid var(--accent);color:var(--accent);background:var(--accent-dim)}
+  .verdict .tag{padding:4px 10px;border-radius:5px;font-weight:500;font-size:11px;letter-spacing:.04em;text-transform:uppercase;border:1px solid var(--border-strong);color:var(--txt3);background:transparent}
+  .verdict .tag.active{border-color:var(--accent);color:var(--accent);background:var(--accent-dim)}
   .verdict .txt{color:var(--txt2);font-size:13px;line-height:1.55;flex:1}
   .verdict .score{text-align:right;display:flex;align-items:baseline;gap:8px}
   .verdict .score .l{font-size:9px;color:var(--txt3);letter-spacing:.15em;text-transform:uppercase;font-weight:500}
   .verdict .score .n{font-family:var(--mono);font-size:28px;font-weight:600;color:var(--txt);letter-spacing:-0.02em}
 
-  /* grid */
   .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:14px}
   .card{background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:18px 20px;transition:border-color .2s}
   .card:hover{border-color:var(--border-strong)}
@@ -76,21 +73,18 @@
   .col-3{grid-column:span 3}.col-4{grid-column:span 4}.col-5{grid-column:span 5}
   .col-6{grid-column:span 6}.col-7{grid-column:span 7}.col-8{grid-column:span 8}.col-12{grid-column:span 12}
 
-  /* metric rows */
   .mrow{display:flex;justify-content:space-between;align-items:baseline;padding:9px 0;border-bottom:1px solid var(--border)}
   .mrow:last-child{border-bottom:none}
   .mrow .k{color:var(--txt3);font-size:12px}
   .mrow .v{font-family:var(--mono);font-size:13px;font-weight:500;color:var(--txt)}
   .up{color:var(--accent)}.down{color:var(--red)}
 
-  /* stat tiles */
   .tiles{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
   .tile{background:var(--bg-elev);border:1px solid var(--border);border-radius:8px;padding:12px 13px}
   .tile .l{font-size:9px;color:var(--txt3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px;font-weight:500}
   .tile .v{font-family:var(--mono);font-size:22px;font-weight:600;color:var(--txt);letter-spacing:-0.02em}
   .tile .v small{font-size:11px;color:var(--txt3);font-weight:500;margin-left:2px}
 
-  /* health bars */
   .hbar{margin:12px 0}
   .hbar .top{display:flex;justify-content:space-between;font-size:11px;margin-bottom:6px}
   .hbar .top .k{color:var(--txt3)}
@@ -98,7 +92,6 @@
   .track{height:3px;border-radius:99px;background:var(--border);overflow:hidden}
   .fill{height:100%;border-radius:99px;background:var(--txt2);transition:width .4s}
 
-  /* compare table */
   table{width:100%;border-collapse:collapse;font-size:12px}
   th,td{text-align:right;padding:10px 8px;border-bottom:1px solid var(--border)}
   th:first-child,td:first-child{text-align:left}
@@ -108,7 +101,6 @@
   tr.me td{background:var(--bg-elev)}
   tr.me td.name{color:var(--txt);font-weight:500}
 
-  /* ai narrative */
   .ai-note{background:var(--bg-elev);border:1px solid var(--border);border-left:2px solid var(--accent);border-radius:0 6px 6px 0;padding:11px 14px;margin-top:14px}
   .ai-note .h{font-size:9px;color:var(--accent);letter-spacing:.15em;margin-bottom:6px;font-weight:600;text-transform:uppercase}
   .ai-note p{font-size:12px;line-height:1.6;color:var(--txt2)}
@@ -117,7 +109,6 @@
   .chart-box{position:relative;height:220px}
   .radar-box{position:relative;height:280px}
 
-  /* unsupported feature card */
   .unsupp{padding:20px 4px;color:var(--txt3);font-size:12px;line-height:1.6}
   .unsupp .ttl{color:var(--txt2);font-weight:500;margin-bottom:6px;font-size:13px}
   .unsupp .note{color:var(--txt3);font-size:10px;margin-top:6px;letter-spacing:.02em}
@@ -136,121 +127,105 @@
     <div class="logo"><span class="dot">◇</span><span>AI Invest <span class="b">Radar</span></span></div>
     <div class="search">
       <span class="ic">⌕</span>
-      <input id="q" placeholder="Search company or ticker — トヨタ自動車, 7203, AAPL" value="トヨタ自動車">
+      <input id="q" placeholder="Search company or ticker — トヨタ自動車, 7203, AAPL" value="">
       <button onclick="analyze()">Analyze</button>
     </div>
   </header>
 
-  <!-- company head -->
   <div class="chead">
     <div class="left">
-      <h1 id="cName">トヨタ自動車</h1>
-      <span class="code" id="cBadge">7203</span>
-      <div class="sub" id="cSub">東証プライム<span>·</span>輸送用機器<span>·</span>Toyota Motor Corporation</div>
+      <h1 id="cName">企業を検索してください</h1>
+      <span class="code" id="cBadge">—</span>
+      <div class="sub" id="cSub">Market · Sector · Company Name</div>
     </div>
     <div class="price">
-      <div class="v" id="cPrice">¥2,847.5</div>
-      <div class="c up" id="cPriceChange">+42.0 (+1.50%)</div>
+      <div class="v" id="cPrice">¥—</div>
+      <div class="c" id="cPriceChange">— (—)</div>
     </div>
   </div>
 
-  <!-- AI verdict -->
   <div class="verdict">
-    <span class="tag" id="cVerdict">Buy / やや買い</span>
-    <span class="txt" id="cComment">財務健全性と配当の安定性は高水準。一方で成長率は業界平均並みで、株価は割安圏。AIは中長期での保有に妥当性ありと判断しています。</span>
-    <div class="score"><span class="l">AI SCORE</span><span class="n" id="cScore">73</span></div>
+    <span class="tag" id="cVerdict">—</span>
+    <span class="txt" id="cComment">検索ボックスに企業名または証券コードを入力し、「Analyze」を押してください。</span>
+    <div class="score"><span class="l">AI SCORE</span><span class="n" id="cScore">—</span></div>
   </div>
 
   <div class="grid">
-    <!-- 企業概要 -->
     <div class="card col-4">
       <h3>OVERVIEW <span class="jp">企業概要</span></h3>
-      <div class="mrow"><span class="k">時価総額 / Market Cap</span><span class="v" id="cMcap">¥46.2億</span></div>
-      <div class="mrow"><span class="k">市場区分 / Market</span><span class="v" id="cMarket">東証プライム</span></div>
-      <div class="mrow"><span class="k">セクター(17)</span><span class="v" id="cSector">自動車</span></div>
-      <div class="mrow"><span class="k">セクター(33)</span><span class="v" id="cSector33">輸送用機器</span></div>
-      <div class="mrow"><span class="k">決算期 / Period</span><span class="v" id="cPeriod">3Q</span></div>
+      <div class="mrow"><span class="k">時価総額 / Market Cap</span><span class="v" id="cMcap">—</span></div>
+      <div class="mrow"><span class="k">市場区分 / Market</span><span class="v" id="cMarket">—</span></div>
+      <div class="mrow"><span class="k">セクター(17)</span><span class="v" id="cSector">—</span></div>
+      <div class="mrow"><span class="k">セクター(33)</span><span class="v" id="cSector33">—</span></div>
+      <div class="mrow"><span class="k">決算期 / Period</span><span class="v" id="cPeriod">—</span></div>
     </div>
 
-    <!-- 株価情報 -->
     <div class="card col-8">
       <h3>PRICE <span class="jp">株価情報</span><span class="meta">last 12 months</span></h3>
       <div class="chart-box"><canvas id="priceChart" role="img" aria-label="株価推移チャート"></canvas></div>
     </div>
 
-    <!-- 業績推移 -->
     <div class="card col-7">
       <h3>PERFORMANCE <span class="jp">業績推移</span><span class="meta">売上高 · 営業利益</span></h3>
       <div class="chart-box"><canvas id="perfChart" role="img" aria-label="業績推移"></canvas></div>
     </div>
 
-    <!-- 株価割安度 -->
     <div class="card col-5">
       <h3>VALUATION <span class="jp">株価割安度</span></h3>
       <div class="tiles">
-        <div class="tile"><div class="l">PER</div><div class="v"><span id="cPer">9.8</span><small>x</small></div></div>
-        <div class="tile"><div class="l">PBR</div><div class="v"><span id="cPbr">1.02</span><small>x</small></div></div>
-        <div class="tile"><div class="l">PSR</div><div class="v">0.84<small>x</small></div></div>
-        <div class="tile"><div class="l">EV / EBITDA</div><div class="v">7.1<small>x</small></div></div>
+        <div class="tile"><div class="l">PER</div><div class="v"><span id="cPer">—</span><small>x</small></div></div>
+        <div class="tile"><div class="l">PBR</div><div class="v"><span id="cPbr">—</span><small>x</small></div></div>
+        <div class="tile"><div class="l">PSR</div><div class="v">—<small>x</small></div></div>
+        <div class="tile"><div class="l">EV / EBITDA</div><div class="v">—<small>x</small></div></div>
       </div>
-      <div class="ai-note"><div class="h">AI Insight</div><p>PER・PBRともに業界平均（PER 12.5倍）を下回り、割安水準。理論株価は約¥3,180と試算され、現在値に約11%の上昇余地。</p></div>
+      <div class="ai-note"><div class="h">AI Insight</div><p>分析を実行すると、業界平均との比較を表示します。</p></div>
     </div>
 
-    <!-- 財務健全性 -->
     <div class="card col-4">
       <h3>FINANCIALS <span class="jp">財務健全性</span></h3>
-      <div class="hbar"><div class="top"><span class="k">自己資本比率</span><span class="v" id="cEqRatio">38.4%</span></div><div class="track"><div class="fill" id="cEqRatioBar" style="width:77%"></div></div></div>
-      <div class="hbar"><div class="top"><span class="k">ROE</span><span class="v" id="cRoe">11.2%</span></div><div class="track"><div class="fill" id="cRoeBar" style="width:56%"></div></div></div>
-      <div class="hbar"><div class="top"><span class="k">ROA</span><span class="v" id="cRoa">4.8%</span></div><div class="track"><div class="fill" id="cRoaBar" style="width:48%"></div></div></div>
-      <div class="hbar"><div class="top"><span class="k">営業利益率</span><span class="v" id="cOpMargin">8.4%</span></div><div class="track"><div class="fill" id="cOpMarginBar" style="width:50%"></div></div></div>
-      <div class="hbar"><div class="top"><span class="k">営業CF（億円）</span><span class="v" id="cCfo">3.8</span></div><div class="track"><div class="fill" id="cCfoBar" style="width:70%"></div></div></div>
+      <div class="hbar"><div class="top"><span class="k">自己資本比率</span><span class="v" id="cEqRatio">—</span></div><div class="track"><div class="fill" id="cEqRatioBar" style="width:0%"></div></div></div>
+      <div class="hbar"><div class="top"><span class="k">ROE</span><span class="v" id="cRoe">—</span></div><div class="track"><div class="fill" id="cRoeBar" style="width:0%"></div></div></div>
+      <div class="hbar"><div class="top"><span class="k">ROA</span><span class="v" id="cRoa">—</span></div><div class="track"><div class="fill" id="cRoaBar" style="width:0%"></div></div></div>
+      <div class="hbar"><div class="top"><span class="k">営業利益率</span><span class="v" id="cOpMargin">—</span></div><div class="track"><div class="fill" id="cOpMarginBar" style="width:0%"></div></div></div>
+      <div class="hbar"><div class="top"><span class="k">営業CF（億円）</span><span class="v" id="cCfo">—</span></div><div class="track"><div class="fill" id="cCfoBar" style="width:0%"></div></div></div>
     </div>
 
-    <!-- 配当情報 -->
     <div class="card col-4">
       <h3>DIVIDEND <span class="jp">配当情報</span></h3>
       <div class="tiles">
-        <div class="tile"><div class="l">利回り Yield</div><div class="v up"><span id="cDivYield">2.84</span><small>%</small></div></div>
-        <div class="tile"><div class="l">年間配当 DPS</div><div class="v">¥<span id="cDivAnn">80</span></div></div>
-        <div class="tile"><div class="l">配当性向</div><div class="v"><span id="cPayout">28</span><small>%</small></div></div>
-        <div class="tile"><div class="l">EPS</div><div class="v">¥<span id="cEps">232.5</span></div></div>
+        <div class="tile"><div class="l">利回り Yield</div><div class="v"><span id="cDivYield">—</span><small>%</small></div></div>
+        <div class="tile"><div class="l">年間配当 DPS</div><div class="v">¥<span id="cDivAnn">—</span></div></div>
+        <div class="tile"><div class="l">配当性向</div><div class="v"><span id="cPayout">—</span><small>%</small></div></div>
+        <div class="tile"><div class="l">EPS</div><div class="v">¥<span id="cEps">—</span></div></div>
       </div>
-      <div class="ai-note"><div class="h">Status</div><p id="cDivNote">配当性向に余裕があり、減配リスクは低い水準。安定したインカム狙いに適合。</p></div>
+      <div class="ai-note"><div class="h">Status</div><p id="cDivNote">分析実行後に配当の状況を表示します。</p></div>
     </div>
 
-    <!-- 成長性分析 -->
     <div class="card col-4">
       <h3>GROWTH <span class="jp">成長性分析</span></h3>
-      <div class="mrow"><span class="k">売上成長率 YoY</span><span class="v" id="cSalesGrowth">+6.2%</span></div>
-      <div class="mrow"><span class="k">営業利益成長率 YoY</span><span class="v" id="cOpGrowth">+9.1%</span></div>
-      <div class="mrow"><span class="k">通期売上予想</span><span class="v" id="cFSales">¥50億</span></div>
-      <div class="mrow"><span class="k">当期売上累計</span><span class="v" id="cSales">¥38億</span></div>
-      <div class="mrow"><span class="k">営業利益（累計）</span><span class="v" id="cOp">¥3.2億</span></div>
+      <div class="mrow"><span class="k">売上成長率 YoY</span><span class="v" id="cSalesGrowth">—</span></div>
+      <div class="mrow"><span class="k">営業利益成長率 YoY</span><span class="v" id="cOpGrowth">—</span></div>
+      <div class="mrow"><span class="k">通期売上予想</span><span class="v" id="cFSales">—</span></div>
+      <div class="mrow"><span class="k">当期売上累計</span><span class="v" id="cSales">—</span></div>
+      <div class="mrow"><span class="k">営業利益（累計）</span><span class="v" id="cOp">—</span></div>
     </div>
 
-    <!-- AI 投資レーダーチャート -->
     <div class="card col-6">
       <h3>RADAR <span class="jp">AI投資レーダー</span></h3>
       <div class="radar-box"><canvas id="radarChart" role="img" aria-label="AI投資レーダーチャート"></canvas></div>
     </div>
 
-    <!-- 競合比較 -->
     <div class="card col-6">
       <h3>PEERS <span class="jp">競合比較</span><span class="meta" id="cPeerSector">同業種</span></h3>
       <table>
         <thead><tr><th>Company</th><th>PER</th><th>ROE</th><th>Yield</th><th>Code</th></tr></thead>
         <tbody id="cPeerTbody">
-          <tr class="me"><td class="name">トヨタ自動車</td><td>9.8</td><td>11.2%</td><td>2.84%</td><td>7203</td></tr>
-          <tr><td class="name">ホンダ</td><td>8.1</td><td>9.8%</td><td>2.41%</td><td>7267</td></tr>
-          <tr><td class="name">日産自動車</td><td>11.4</td><td>5.1%</td><td>1.92%</td><td>7201</td></tr>
-          <tr><td class="name">スズキ</td><td>7.6</td><td>13.5%</td><td>1.55%</td><td>7269</td></tr>
-          <tr><td class="name">マツダ</td><td>8.9</td><td>8.2%</td><td>2.10%</td><td>7261</td></tr>
+          <tr><td colspan="5" style="text-align:center;color:var(--txt3);padding:24px">分析実行後に同業種企業を表示します</td></tr>
         </tbody>
       </table>
-      <div class="ai-note"><div class="h">Peer Analysis</div><p id="cPeerComment">同セクター企業との比較分析を実施中…</p></div>
+      <div class="ai-note"><div class="h">Peer Analysis</div><p id="cPeerComment">分析実行後に同業種比較を表示します。</p></div>
     </div>
 
-    <!-- ニュース（未対応） -->
     <div class="card col-7">
       <h3>NEWS <span class="jp">ニュース & センチメント</span></h3>
       <div class="unsupp">
@@ -260,7 +235,6 @@
       </div>
     </div>
 
-    <!-- 優待 + AIニュース要約（未対応） -->
     <div class="card col-5">
       <h3>SHAREHOLDER <span class="jp">株主優待</span></h3>
       <div class="unsupp">
@@ -286,8 +260,8 @@ Chart.defaults.color=txt3;
 
 window.priceChartRef = new Chart(document.getElementById('priceChart'),{
   type:'line',
-  data:{labels:['7月','8月','9月','10月','11月','12月','1月','2月','3月','4月','5月','6月'],
-    datasets:[{data:[2410,2380,2520,2490,2610,2580,2700,2680,2750,2790,2805,2847],
+  data:{labels:[],
+    datasets:[{data:[],
       borderColor:'#fafafa',borderWidth:1.5,fill:true,tension:.35,pointRadius:0,
       backgroundColor:(c)=>{const g=c.chart.ctx.createLinearGradient(0,0,0,220);g.addColorStop(0,'rgba(250,250,250,0.08)');g.addColorStop(1,'rgba(250,250,250,0)');return g}}]},
   options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
@@ -296,10 +270,11 @@ window.priceChartRef = new Chart(document.getElementById('priceChart'),{
 
 window.perfChartRef = new Chart(document.getElementById('perfChart'),{
   type:'bar',
-  data:{labels:['2021','2022','2023','2024','2025'],
+  data:{labels:[],
     datasets:[
-      {label:'売上高(億円)',data:[272000,314000,372000,451000,480000],backgroundColor:'#3a3a3a',borderRadius:2,barPercentage:.7},
-      {label:'営業利益(億円)',data:[22000,30000,27000,53000,51000],backgroundColor:accent,borderRadius:2,barPercentage:.7}]},  options:{responsive:true,maintainAspectRatio:false,
+      {label:'売上高(億円)',data:[],backgroundColor:'#3a3a3a',borderRadius:2,barPercentage:.7},
+      {label:'営業利益(億円)',data:[],backgroundColor:accent,borderRadius:2,barPercentage:.7}]},
+  options:{responsive:true,maintainAspectRatio:false,
     plugins:{legend:{position:'top',align:'end',labels:{boxWidth:8,boxHeight:8,usePointStyle:true,pointStyle:'rect',padding:14,font:{size:11}}}},
     scales:{y:{grid:{color:grid,drawTicks:false},border:{display:false},ticks:{padding:8}},x:{grid:{display:false},border:{display:false}}}}
 });
@@ -307,12 +282,9 @@ window.perfChartRef = new Chart(document.getElementById('perfChart'),{
 window.radarChartRef = new Chart(document.getElementById('radarChart'),{
   type:'radar',
   data:{labels:['割安度','成長性','財務健全性','収益性','配当','安定性'],
-    datasets:[{label:'Company',data:[78,62,82,70,76,88],
+    datasets:[{label:'Company',data:[0,0,0,0,0,0],
       borderColor:'#fafafa',backgroundColor:'rgba(250,250,250,0.06)',borderWidth:1.5,
-      pointBackgroundColor:'#fafafa',pointRadius:3},
-    {label:'業界平均 / Peers',data:[60,65,58,60,55,62],
-      borderColor:txt3,backgroundColor:'transparent',borderWidth:1,
-      pointBackgroundColor:txt3,pointRadius:2,borderDash:[3,3]}]},
+      pointBackgroundColor:'#fafafa',pointRadius:3}]},
   options:{responsive:true,maintainAspectRatio:false,
     plugins:{legend:{position:'top',align:'end',labels:{boxWidth:8,usePointStyle:true,pointStyle:'circle',padding:14,font:{size:11}}}},
     scales:{r:{angleLines:{color:'rgba(255,255,255,0.06)'},grid:{color:'rgba(255,255,255,0.06)'},
@@ -329,7 +301,7 @@ function fmtJpyCompact(v){
   if (abs > 0) return '¥' + oku.toFixed(2) + '億';
   return '¥0';
 }
-  function fmtPct(v, plus){
+function fmtPct(v, plus){
   if (v == null || isNaN(v)) return '—';
   const sign = (plus && v > 0) ? '+' : '';
   return sign + v.toFixed(2) + '%';
@@ -413,7 +385,11 @@ async function analyze(){
     setText('cOp', d.op != null ? fmtJpyCompact(d.op) : '—');
 
     const verdictMap = { strong_buy:'Strong Buy / 強い買い', buy:'Buy / やや買い', hold:'Hold / 中立', sell:'Sell / やや売り', strong_sell:'Strong Sell / 売り' };
-    setText('cVerdict', verdictMap[ai.verdict] || ai.verdict || '—');
+    const verdictEl = document.getElementById('cVerdict');
+    if (verdictEl) {
+      verdictEl.textContent = verdictMap[ai.verdict] || ai.verdict || '—';
+      verdictEl.classList.add('active');
+    }
     setText('cComment', ai.comment || '—');
     setText('cScore', ai.ai_score != null ? ai.ai_score : '—');
 

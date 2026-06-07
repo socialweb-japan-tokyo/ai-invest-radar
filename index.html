@@ -242,38 +242,44 @@
 
     <!-- 競合比較 -->
     <div class="card col-6">
-      <h3><span class="i">◆</span>競合比較</h3>
+      <h3><span class="i">◆</span>競合比較 <span id="cPeerSector" style="margin-left:auto;font-size:11px;color:var(--txt3)">同業種</span></h3>
       <table>
-        <thead><tr><th>企業</th><th>PER</th><th>ROE</th><th>配当</th><th>AIスコア</th></tr></thead>
-        <tbody>
-          <tr class="me"><td class="name">トヨタ自動車</td><td>9.8</td><td>11.2%</td><td class="best">2.84%</td><td class="best">73</td></tr>
-          <tr><td class="name">ホンダ</td><td>8.1</td><td>9.8%</td><td>2.41%</td><td>68</td></tr>
-          <tr><td class="name">日産自動車</td><td>11.4</td><td>5.1%</td><td>1.92%</td><td>54</td></tr>
-          <tr><td class="name">スズキ</td><td class="best">7.6</td><td class="best">13.5%</td><td>1.55%</td><td>71</td></tr>
-          <tr><td class="name">マツダ</td><td>8.9</td><td>8.2%</td><td>2.10%</td><td>61</td></tr>
+        <thead><tr><th>企業</th><th>PER</th><th>ROE</th><th>配当</th><th>コード</th></tr></thead>
+        <tbody id="cPeerTbody">
+          <tr class="me"><td class="name">トヨタ自動車</td><td>9.8</td><td>11.2%</td><td>2.84%</td><td>7203</td></tr>
+          <tr><td class="name">ホンダ</td><td>8.1</td><td>9.8%</td><td>2.41%</td><td>7267</td></tr>
+          <tr><td class="name">日産自動車</td><td>11.4</td><td>5.1%</td><td>1.92%</td><td>7201</td></tr>
+          <tr><td class="name">スズキ</td><td>7.6</td><td>13.5%</td><td>1.55%</td><td>7269</td></tr>
+          <tr><td class="name">マツダ</td><td>8.9</td><td>8.2%</td><td>2.10%</td><td>7261</td></tr>
         </tbody>
       </table>
-      <div class="ai-note"><div class="h">◈ AI競合分析</div><p>5社中、配当の安定性とブランド力で首位。割安度ではスズキが優位だが、規模とキャッシュフローの厚みでトヨタが総合首位。</p></div>
+      <div class="ai-note"><div class="h">◈ AI競合分析</div><p id="cPeerComment">同セクター企業との比較分析を実施中…</p></div>
     </div>
 
-    <!-- ニュース -->
+    <!-- ニュース（データ取得不可） -->
     <div class="card col-7">
       <h3><span class="i">◆</span>ニュース ＆ AIセンチメント</h3>
-      <div class="news">
-        <a href="#"><div class="t">トヨタ、次世代EV向け全固体電池の量産ラインを2027年稼働へ</div><div class="m"><span class="s pos">ポジティブ</span><span>日経新聞</span><span>2時間前</span></div></a>
-        <a href="#"><div class="t">第3四半期決算、営業利益が市場予想を上回る　通期見通し上方修正</div><div class="m"><span class="s pos">ポジティブ</span><span>Bloomberg</span><span>1日前</span></div></a>
-        <a href="#"><div class="t">為替の円安進行が輸出採算を押し上げ、自動車セクター全体に追い風</div><div class="m"><span class="s neu">中立</span><span>Reuters</span><span>2日前</span></div></a>
-        <a href="#"><div class="t">北米市場でのリコール対応費用が一部利益を圧迫する可能性</div><div class="m"><span class="s neg">ネガティブ</span><span>東洋経済</span><span>3日前</span></div></a>
+      <div style="padding:20px 4px;color:var(--txt2);font-size:13.5px;line-height:1.6">
+        <div style="color:var(--txt);font-weight:600;margin-bottom:8px;font-size:14px">📰 現在のプランではニュース取得不可</div>
+        ニュースおよびセンチメント分析機能は、別途ニュースAPI（NewsAPI、金融ニュース配信等）との連携が必要です。<br>
+        <span style="color:var(--txt3);font-size:12px">※ 将来的にNewsAPI等の外部サービス連携で実装予定</span>
       </div>
     </div>
 
-    <!-- 優待情報 + AIニュース要約 -->
+    <!-- 優待情報 + AIニュース要約（データ取得不可） -->
     <div class="card col-5">
       <h3><span class="i">◆</span>株主優待</h3>
-      <div class="perk"><div class="ic">★</div><div><div class="t">該当する株主優待制度なし</div><div class="d">トヨタは優待制度を実施していません</div></div></div>
-      <div style="height:8px"></div>
+      <div style="padding:14px 4px;color:var(--txt2);font-size:13px;line-height:1.6">
+        <div style="color:var(--txt);font-weight:600;margin-bottom:6px">🎁 優待情報の取得は未対応</div>
+        J-Quants APIには優待情報が含まれていません。<br>
+        <span style="color:var(--txt3);font-size:11px">※ 外部の優待情報サービス連携で実装予定</span>
+      </div>
       <h3 style="margin-top:18px"><span class="i">◈</span>AIニュース要約</h3>
-      <div class="ai-note" style="margin-top:8px"><div class="h">◈ 直近7日間の総合判断</div><p>全固体電池と好決算が株価の押し上げ材料。一方リコール費用は短期リスク。AIセンチメント指数は <b style="color:var(--green)">+0.42（やや強気）</b>。</p></div>
+      <div style="padding:14px 4px;color:var(--txt2);font-size:13px;line-height:1.6">
+        <div style="color:var(--txt);font-weight:600;margin-bottom:6px">📊 ニュース要約は未対応</div>
+        ニュース本文の取得が必要なため、現在のプランでは利用できません。<br>
+        <span style="color:var(--txt3);font-size:11px">※ ニュースAPI連携後に実装予定</span>
+      </div>
     </div>
   </div>
 </div>
@@ -462,6 +468,36 @@ async function analyze(){
       window.perfChartRef.data.datasets[1].data = d.perfHistory.map(p => p.op ? p.op/1e12 : 0);
       window.perfChartRef.update();
     }
+
+    // 競合比較テーブル
+    const tbody = document.getElementById('cPeerTbody');
+    if (tbody) {
+      const fmtVal = v => v == null ? '—' : v;
+      const fmtPctVal = v => v == null ? '—' : v + '%';
+      const rows = [];
+      // 自社を最上段に
+      rows.push('<tr class="me"><td class="name">' + (d.name || '—') + '</td>' +
+        '<td>' + fmtVal(d.per) + '</td>' +
+        '<td>' + fmtPctVal(d.roe) + '</td>' +
+        '<td class="best">' + fmtPctVal(d.divYield) + '</td>' +
+        '<td>' + (d.code ? d.code.slice(0,4) : '—') + '</td></tr>');
+      // 競合
+      if (d.peers && d.peers.length) {
+        for (const p of d.peers) {
+          rows.push('<tr><td class="name">' + p.name + '</td>' +
+            '<td>' + fmtVal(p.per) + '</td>' +
+            '<td>' + fmtPctVal(p.roe) + '</td>' +
+            '<td>' + fmtPctVal(p.divYield) + '</td>' +
+            '<td>' + (p.code ? p.code.slice(0,4) : '—') + '</td></tr>');
+        }
+      } else {
+        rows.push('<tr><td colspan="5" style="text-align:center;color:var(--txt3);padding:14px">同セクター企業データなし</td></tr>');
+      }
+      tbody.innerHTML = rows.join('');
+    }
+    setText('cPeerSector', d.sector33 || '同業種');
+    if (ai.peer_comment) setText('cPeerComment', ai.peer_comment);
+    else if (ai.comment) setText('cPeerComment', '同セクター内での競争位置については本AI判断コメントを参照してください。');
   } catch (e) {
     alert('分析エラー: ' + e.message);
   } finally {

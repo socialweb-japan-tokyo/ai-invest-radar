@@ -26,6 +26,55 @@ function resolveCode(query, companies) {
   return null;
 }
 
+const num = function(v) {
+  if (v === null || v === undefined || v === "") return null;
+  const n = Number(v);
+  return isNaN(n) ? null : n;
+};
+
+// 1社分の主要指標を取る（軽量版、AI分析なし）
+async function fetchPeerMetrics(code, name, apiKey) {
+  const headers = { "x-api-key": apiKey };
+  try {
+    const [finRes, priceRes] = await Promise.all([
+      fetch("https://api.jquants.com/v2/fins/summary?code=" + code, { headers }).then(r => r.json()),
+      fetch("https://api.jquants.com/v2/equities/bars/daily?code=" + code, { headers }).then(r => r.json())
+    ]);
+    const finList = finRes.data || [];
+    const priceList = priceRes.data || [];
+    const fin = finList[finList.length - 1] || {};
+
+    let price = {};
+    for (let i = priceList.length - 1; i >= 0; i--) {
+      const p = priceList[i];
+      if (p && (p.AdjC != null || p.C != null)) { price = p; break; }
+    }
+    const closePrice = num(price.AdjC) || num(price.C);
+    const eps = num(fin.EPS);
+    const shares = num(fin.ShOutFY);
+    const treasury = num(fin.TrShFY) || 0;
+    const equity = num(fin.Eq);
+    const np = num(fin.NP);
+    const netShares = shares ? shares - treasury : null;
+    const bps = (equity && netShares) ? equity / netShares : null;
+    const divAnn = num(fin.FDivAnn);
+    const period = fin.CurPerType || "";
+    const mult = period === "FY" ? 1 : period === "3Q" ? 4/3 : period === "2Q" ? 2 : period === "1Q" ? 4 : 1;
+    const annualNp = np ? np * mult : null;
+
+    return {
+      code: code,
+      name: name,
+      per: (closePrice && eps) ? Math.round(closePrice / eps * 100) / 100 : null,
+      pbr: (closePrice && bps) ? Math.round(closePrice / bps * 100) / 100 : null,
+      roe: (annualNp && equity) ? Math.round(annualNp / equity * 10000) / 100 : null,
+      divYield: (divAnn && closePrice) ? Math.round(divAnn / closePrice * 10000) / 100 : null
+    };
+  } catch (e) {
+    return { code: code, name: name, per: null, pbr: null, roe: null, divYield: null };
+  }
+}
+
 module.exports = async (req, res) => {
   try {
     const apiKey = process.env.JQUANTS_API_KEY;
@@ -55,7 +104,6 @@ module.exports = async (req, res) => {
     const priceList = priceJson.data || [];
     const fin = finList[finList.length - 1] || {};
 
-    // 終値が入っている最新2日を探す（前日比計算のため）
     let price = {};
     let prevPrice = {};
     let foundLatest = false;
@@ -66,12 +114,6 @@ module.exports = async (req, res) => {
         else { prevPrice = p; break; }
       }
     }
-
-    const num = function(v) {
-      if (v === null || v === undefined || v === "") return null;
-      const n = Number(v);
-      return isNaN(n) ? null : n;
-    };
 
     const closePrice = num(price.AdjC) || num(price.C);
     const prevClose = num(prevPrice.AdjC) || num(prevPrice.C);
@@ -95,7 +137,6 @@ module.exports = async (req, res) => {
     const divYield = (divAnn && closePrice) ? Math.round(divAnn / closePrice * 10000) / 100 : null;
     const marketCap = (closePrice && shares) ? closePrice * shares : null;
 
-    // 通期換算（3Q=4/3倍、2Q=2倍、1Q=4倍）
     const period = fin.CurPerType || "";
     const periodMult = period === "FY" ? 1 : period === "3Q" ? 4/3 : period === "2Q" ? 2 : period === "1Q" ? 4 : 1;
     const annualNp = np ? np * periodMult : null;
@@ -104,7 +145,6 @@ module.exports = async (req, res) => {
     const opMargin = (op && sales) ? Math.round(op / sales * 10000) / 100 : null;
     const payoutRatio = (divAnn && eps) ? Math.round(divAnn / (eps * periodMult) * 10000) / 100 : null;
 
-    // 過去業績で成長率計算（過去のFYデータを探す）
     const fyList = finList.filter(f => f.CurPerType === "FY");
     let salesGrowth = null, opGrowth = null;
     if (fyList.length >= 2) {
@@ -116,6 +156,20 @@ module.exports = async (req, res) => {
       if (lo && po) opGrowth = Math.round((lo / po - 1) * 10000) / 100;
     }
 
+    // === 競合比較 ===
+    // 同じセクター33の企業から、自社を除いて時価総額の近い順に4社を取る
+    let peers = [];
+    let peerAnalysis = null;
+    if (companyInfo && companyInfo.S33 && marketCap) {
+      const sameSector = companies.filter(c =>
+        c.S33 === companyInfo.S33 && c.Code !== code && c.CoName
+      );
+      // 規模感の近い企業を選びたいが時価総額は不明なので、銘柄コード順で上位4社を採用
+      const peerSelection = sameSector.slice(0, 4);
+      const peerPromises = peerSelection.map(p => fetchPeerMetrics(p.Code, p.CoName, apiKey));
+      peers = await Promise.all(peerPromises);
+    }
+
     const companyData = {
       code: code,
       name: (companyInfo && companyInfo.CoName) || query,
@@ -124,27 +178,24 @@ module.exports = async (req, res) => {
       sector: companyInfo ? companyInfo.S17Nm : null,
       sector33: companyInfo ? companyInfo.S33Nm : null,
       period: period,
-      price: closePrice,
-      priceChange: priceChange,
-      priceChangePct: priceChangePct,
+      price: closePrice, priceChange: priceChange, priceChangePct: priceChangePct,
       marketCap: marketCap,
       per: per, pbr: pbr, divYield: divYield,
-      sales: sales, op: op, np: np,
-      fSales: num(fin.FSales),
+      sales: sales, op: op, np: np, fSales: num(fin.FSales),
       equity: equity, equityRatio: num(fin.EqAR), assets: assets,
       roe: roe, roa: roa, opMargin: opMargin,
       cfo: num(fin.CFO),
       eps: eps, divAnn: divAnn, payoutRatio: payoutRatio,
       salesGrowth: salesGrowth, opGrowth: opGrowth,
-      // 株価推移チャート用（直近12ヶ月、月次の終値）
       priceHistory: extractMonthlyPrices(priceList),
-      // 業績推移チャート用（過去5年のFY）
       perfHistory: fyList.slice(-5).map(f => ({
         year: f.CurFYEn ? String(f.CurFYEn).slice(0,4) : null,
         sales: num(f.Sales), op: num(f.OP)
-      }))
+      })),
+      peers: peers
     };
 
+    // AI分析
     const promptParts = [
       "You are a stock analyst. Analyze the following Japanese company data from J-Quants. Do not guess missing metrics.",
       "Data: " + JSON.stringify({
@@ -153,17 +204,18 @@ module.exports = async (req, res) => {
         divYield: companyData.divYield, roe: companyData.roe, roa: companyData.roa,
         equityRatio: companyData.equityRatio, opMargin: companyData.opMargin,
         salesGrowth: companyData.salesGrowth, opGrowth: companyData.opGrowth,
-        payoutRatio: companyData.payoutRatio
+        payoutRatio: companyData.payoutRatio,
+        peers: peers.map(p => ({ name: p.name, per: p.per, roe: p.roe, divYield: p.divYield }))
       }),
       "Respond ONLY in JSON like this (no extra text, no markdown):",
-      '{"radar":{"valuation":0-100,"growth":0-100,"financial":0-100,"profitability":0-100,"dividend":0-100,"stability":0-100},"ai_score":0-100,"verdict":"strong_buy|buy|hold|sell|strong_sell","comment":"100 chars in Japanese"}'
+      '{"radar":{"valuation":0-100,"growth":0-100,"financial":0-100,"profitability":0-100,"dividend":0-100,"stability":0-100},"ai_score":0-100,"verdict":"strong_buy|buy|hold|sell|strong_sell","comment":"100 chars in Japanese","peer_comment":"competitive position vs peers in 100 chars Japanese"}'
     ];
     const prompt = promptParts.join("\n");
 
     const aiResRaw = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
       headers: { "content-type": "application/json", "x-api-key": process.env.ANTHROPIC_API_KEY, "anthropic-version": "2023-06-01" },
-      body: JSON.stringify({ model: "claude-haiku-4-5", max_tokens: 1000, messages: [{ role: "user", content: prompt }] })
+      body: JSON.stringify({ model: "claude-haiku-4-5", max_tokens: 1500, messages: [{ role: "user", content: prompt }] })
     });
     const aiRes = await aiResRaw.json();
 
@@ -183,7 +235,6 @@ module.exports = async (req, res) => {
 };
 
 function extractMonthlyPrices(priceList) {
-  // 月ごとに最終取引日の終値を取る、直近12ヶ月分
   const byMonth = {};
   for (const p of priceList) {
     if (!p || !p.Date) continue;

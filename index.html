@@ -3,232 +3,226 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI Invest Radar — AI投資判断プラットフォーム</title>
+<title>AI Invest Radar</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Noto+Sans+JP:wght@400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
   :root{
-    --bg:#070b14;
-    --bg2:#0b1120;
-    --card:rgba(20,30,48,0.55);
-    --card-border:rgba(120,180,255,0.12);
-    --glass-hi:rgba(255,255,255,0.06);
-    --cyan:#22d3ee;
-    --blue:#3b82f6;
-    --cyan-dim:rgba(34,211,238,0.15);
-    --txt:#e8eef9;
-    --txt2:#8ea3c0;
-    --txt3:#5b6f8f;
-    --green:#34d399;
-    --red:#fb7185;
-    --amber:#fbbf24;
-    --mono:'JetBrains Mono',monospace;
-    --sans:'Outfit','Noto Sans JP',sans-serif;
+    --bg:#0a0a0a;
+    --bg-card:#111111;
+    --bg-elev:#141414;
+    --border:#1f1f1f;
+    --border-strong:#2a2a2a;
+    --txt:#fafafa;
+    --txt2:#a1a1aa;
+    --txt3:#52525b;
+    --accent:#10b981;
+    --accent-dim:rgba(16,185,129,0.10);
+    --red:#ef4444;
+    --red-dim:rgba(239,68,68,0.10);
+    --mono:'JetBrains Mono',ui-monospace,monospace;
+    --sans:'Inter','Noto Sans JP',-apple-system,sans-serif;
   }
   *{margin:0;padding:0;box-sizing:border-box}
-  body{
-    font-family:var(--sans);
-    background:var(--bg);
-    color:var(--txt);
-    min-height:100vh;
-    background-image:
-      radial-gradient(900px 500px at 80% -10%, rgba(34,211,238,0.10), transparent 60%),
-      radial-gradient(700px 500px at 0% 10%, rgba(59,130,246,0.10), transparent 55%);
-    -webkit-font-smoothing:antialiased;
-  }
-  .wrap{max-width:1280px;margin:0 auto;padding:24px 28px 80px}
+  html,body{background:var(--bg);color:var(--txt);font-family:var(--sans);-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+  body{min-height:100vh;font-size:14px;line-height:1.5;letter-spacing:-0.005em}
+  .wrap{max-width:1240px;margin:0 auto;padding:20px 24px 80px}
+
   /* header */
-  header{display:flex;align-items:center;gap:18px;padding:8px 0 28px}
-  .logo{display:flex;align-items:center;gap:11px;font-weight:700;font-size:19px;letter-spacing:.3px}
-  .logo .dot{width:30px;height:30px;border-radius:9px;background:linear-gradient(135deg,var(--cyan),var(--blue));
-    display:grid;place-items:center;font-size:15px;box-shadow:0 0 22px rgba(34,211,238,.5)}
-  .logo b{background:linear-gradient(90deg,var(--cyan),#7dd3fc);-webkit-background-clip:text;background-clip:text;color:transparent}
-  .search{flex:1;max-width:560px;margin-left:auto;position:relative}
-  .search input{width:100%;height:48px;border-radius:14px;border:1px solid var(--card-border);
-    background:rgba(10,16,28,.7);backdrop-filter:blur(14px);color:var(--txt);padding:0 52px 0 46px;
-    font-family:var(--sans);font-size:15px;outline:none;transition:.2s}
-  .search input:focus{border-color:var(--cyan);box-shadow:0 0 0 4px var(--cyan-dim)}
-  .search .ic{position:absolute;left:16px;top:50%;transform:translateY(-50%);color:var(--txt3);font-size:17px}
-  .search button{position:absolute;right:6px;top:6px;height:36px;padding:0 16px;border:none;border-radius:10px;
-    background:linear-gradient(135deg,var(--cyan),var(--blue));color:#05121f;font-weight:700;cursor:pointer;font-family:var(--sans);font-size:13px}
+  header{display:flex;align-items:center;gap:14px;padding:4px 0 32px;border-bottom:1px solid var(--border);margin-bottom:32px;padding-bottom:20px}
+  .logo{display:flex;align-items:center;gap:10px;font-weight:600;font-size:15px;letter-spacing:-0.02em}
+  .logo .dot{width:22px;height:22px;border-radius:6px;background:var(--txt);display:grid;place-items:center;font-size:12px;color:var(--bg);font-weight:700}
+  .logo .b{font-weight:500;color:var(--txt2)}
+  .search{flex:1;max-width:520px;margin-left:auto;position:relative;display:flex;gap:8px}
+  .search input{flex:1;height:36px;border-radius:8px;border:1px solid var(--border);background:var(--bg-card);color:var(--txt);padding:0 14px 0 36px;font-family:var(--sans);font-size:13px;outline:none;transition:border-color .15s}
+  .search input:focus{border-color:var(--border-strong)}
+  .search input::placeholder{color:var(--txt3)}
+  .search .ic{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--txt3);font-size:13px;pointer-events:none}
+  .search button{height:36px;padding:0 16px;border:1px solid var(--border-strong);border-radius:8px;background:var(--bg-elev);color:var(--txt);font-weight:500;cursor:pointer;font-family:var(--sans);font-size:13px;transition:background .15s,border-color .15s}
+  .search button:hover{background:var(--bg-card);border-color:#3a3a3a}
+  .search button:disabled{opacity:.5;cursor:default}
+
   /* company head */
-  .chead{display:flex;align-items:center;gap:18px;margin-bottom:22px;flex-wrap:wrap}
-  .badge{width:58px;height:58px;border-radius:16px;background:linear-gradient(135deg,rgba(34,211,238,.25),rgba(59,130,246,.25));
-    border:1px solid var(--card-border);display:grid;place-items:center;font-weight:700;font-size:22px;color:var(--cyan)}
-  .chead h1{font-size:26px;font-weight:600;letter-spacing:.2px}
-  .chead .sub{color:var(--txt2);font-size:13px;margin-top:3px}
+  .chead{display:flex;align-items:flex-end;gap:20px;margin-bottom:24px;flex-wrap:wrap}
+  .chead .left{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+  .chead h1{font-size:40px;font-weight:600;letter-spacing:-0.03em;line-height:1.1}
+  .chead .code{font-family:var(--mono);font-size:14px;color:var(--txt3);padding:3px 8px;border:1px solid var(--border);border-radius:5px;font-weight:500}
+  .chead .sub{width:100%;color:var(--txt3);font-size:12px;margin-top:6px;letter-spacing:.02em}
+  .chead .sub span{margin:0 6px;color:var(--border-strong)}
+  .chead .sub span:first-child{margin-left:0}
   .chead .price{margin-left:auto;text-align:right}
-  .chead .price .v{font-family:var(--mono);font-size:30px;font-weight:700}
-  .chead .price .c{color:var(--green);font-size:14px;font-family:var(--mono);margin-top:2px}
+  .chead .price .v{font-family:var(--mono);font-size:32px;font-weight:600;letter-spacing:-0.02em}
+  .chead .price .c{color:var(--txt2);font-size:12px;font-family:var(--mono);margin-top:4px;font-weight:500}
+  .chead .price .c.up{color:var(--accent)}
+  .chead .price .c.down{color:var(--red)}
+
   /* verdict bar */
-  .verdict{display:flex;align-items:center;gap:18px;padding:16px 22px;border-radius:16px;margin-bottom:24px;
-    background:linear-gradient(135deg,rgba(34,211,238,.10),rgba(59,130,246,.06));border:1px solid rgba(34,211,238,.25)}
-  .verdict .tag{padding:7px 18px;border-radius:999px;font-weight:700;font-size:15px;
-    background:linear-gradient(135deg,var(--cyan),var(--blue));color:#05121f}
-  .verdict .txt{color:var(--txt2);font-size:14px;line-height:1.5}
-  .verdict .score{margin-left:auto;text-align:center}
-  .verdict .score .n{font-family:var(--mono);font-size:28px;font-weight:700;color:var(--cyan)}
-  .verdict .score .l{font-size:11px;color:var(--txt3);letter-spacing:1px}
+  .verdict{display:flex;align-items:center;gap:20px;padding:16px 20px;border:1px solid var(--border);border-radius:10px;margin-bottom:24px;background:var(--bg-card)}
+  .verdict .tag{padding:4px 10px;border-radius:5px;font-weight:500;font-size:11px;letter-spacing:.04em;text-transform:uppercase;border:1px solid var(--accent);color:var(--accent);background:var(--accent-dim)}
+  .verdict .txt{color:var(--txt2);font-size:13px;line-height:1.55;flex:1}
+  .verdict .score{text-align:right;display:flex;align-items:baseline;gap:8px}
+  .verdict .score .l{font-size:9px;color:var(--txt3);letter-spacing:.15em;text-transform:uppercase;font-weight:500}
+  .verdict .score .n{font-family:var(--mono);font-size:28px;font-weight:600;color:var(--txt);letter-spacing:-0.02em}
+
   /* grid */
-  .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:18px}
-  .card{background:var(--card);border:1px solid var(--card-border);border-radius:18px;padding:20px 22px;
-    backdrop-filter:blur(20px);position:relative;overflow:hidden}
-  .card::before{content:"";position:absolute;inset:0 0 auto 0;height:1px;background:linear-gradient(90deg,transparent,var(--glass-hi),transparent)}
-  .card h3{font-size:13px;font-weight:600;color:var(--txt2);letter-spacing:.5px;text-transform:uppercase;
-    margin-bottom:16px;display:flex;align-items:center;gap:8px}
-  .card h3 .i{color:var(--cyan)}
+  .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:14px}
+  .card{background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:18px 20px;transition:border-color .2s}
+  .card:hover{border-color:var(--border-strong)}
+  .card h3{font-size:11px;font-weight:500;color:var(--txt3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:16px;display:flex;align-items:center;gap:8px;font-family:var(--sans)}
+  .card h3 .jp{color:var(--txt2);font-size:11px;letter-spacing:.02em;text-transform:none;font-weight:500}
+  .card h3 .meta{margin-left:auto;color:var(--txt3);font-size:10px;letter-spacing:.05em;text-transform:none}
   .col-3{grid-column:span 3}.col-4{grid-column:span 4}.col-5{grid-column:span 5}
   .col-6{grid-column:span 6}.col-7{grid-column:span 7}.col-8{grid-column:span 8}.col-12{grid-column:span 12}
+
   /* metric rows */
-  .mrow{display:flex;justify-content:space-between;align-items:baseline;padding:9px 0;border-bottom:1px solid rgba(120,180,255,.06)}
+  .mrow{display:flex;justify-content:space-between;align-items:baseline;padding:9px 0;border-bottom:1px solid var(--border)}
   .mrow:last-child{border-bottom:none}
-  .mrow .k{color:var(--txt2);font-size:13px}
-  .mrow .v{font-family:var(--mono);font-size:15px;font-weight:500}
-  .up{color:var(--green)}.down{color:var(--red)}
+  .mrow .k{color:var(--txt3);font-size:12px}
+  .mrow .v{font-family:var(--mono);font-size:13px;font-weight:500;color:var(--txt)}
+  .up{color:var(--accent)}.down{color:var(--red)}
+
   /* stat tiles */
-  .tiles{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
-  .tile{background:rgba(10,16,28,.5);border:1px solid rgba(120,180,255,.08);border-radius:13px;padding:13px 15px}
-  .tile .l{font-size:11px;color:var(--txt3);letter-spacing:.4px;margin-bottom:6px}
-  .tile .v{font-family:var(--mono);font-size:20px;font-weight:700}
-  .tile .v small{font-size:12px;color:var(--txt2)}
+  .tiles{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+  .tile{background:var(--bg-elev);border:1px solid var(--border);border-radius:8px;padding:12px 13px}
+  .tile .l{font-size:9px;color:var(--txt3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px;font-weight:500}
+  .tile .v{font-family:var(--mono);font-size:22px;font-weight:600;color:var(--txt);letter-spacing:-0.02em}
+  .tile .v small{font-size:11px;color:var(--txt3);font-weight:500;margin-left:2px}
+
   /* health bars */
-  .hbar{margin:13px 0}
-  .hbar .top{display:flex;justify-content:space-between;font-size:12px;margin-bottom:6px}
-  .hbar .top .k{color:var(--txt2)}.hbar .top .v{font-family:var(--mono);color:var(--txt)}
-  .track{height:7px;border-radius:99px;background:rgba(120,180,255,.1);overflow:hidden}
-  .fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--blue),var(--cyan))}
-  /* news */
-  .news a{display:block;padding:11px 0;border-bottom:1px solid rgba(120,180,255,.06);text-decoration:none;color:var(--txt)}
-  .news a:last-child{border:none}
-  .news .t{font-size:13.5px;line-height:1.45;margin-bottom:5px}
-  .news .m{font-size:11px;color:var(--txt3);display:flex;gap:10px}
-  .news .s{padding:1px 8px;border-radius:99px;font-size:10px;font-weight:600}
-  .s.pos{background:rgba(52,211,153,.15);color:var(--green)}
-  .s.neg{background:rgba(251,113,133,.15);color:var(--red)}
-  .s.neu{background:rgba(142,163,192,.15);color:var(--txt2)}
-  /* perks */
-  .perk{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid rgba(120,180,255,.06)}
-  .perk:last-child{border:none}
-  .perk .ic{width:34px;height:34px;border-radius:10px;background:var(--cyan-dim);display:grid;place-items:center;color:var(--cyan);flex-shrink:0}
-  .perk .t{font-size:13px}.perk .d{font-size:11px;color:var(--txt3);margin-top:2px}
+  .hbar{margin:12px 0}
+  .hbar .top{display:flex;justify-content:space-between;font-size:11px;margin-bottom:6px}
+  .hbar .top .k{color:var(--txt3)}
+  .hbar .top .v{font-family:var(--mono);color:var(--txt);font-weight:500}
+  .track{height:3px;border-radius:99px;background:var(--border);overflow:hidden}
+  .fill{height:100%;border-radius:99px;background:var(--txt2);transition:width .4s}
+
   /* compare table */
-  table{width:100%;border-collapse:collapse;font-size:13px}
-  th,td{text-align:right;padding:11px 10px;border-bottom:1px solid rgba(120,180,255,.07)}
+  table{width:100%;border-collapse:collapse;font-size:12px}
+  th,td{text-align:right;padding:10px 8px;border-bottom:1px solid var(--border)}
   th:first-child,td:first-child{text-align:left}
-  th{color:var(--txt3);font-weight:500;font-size:11px;text-transform:uppercase;letter-spacing:.5px}
-  td{font-family:var(--mono)}
-  td.name{font-family:var(--sans);color:var(--txt)}
-  tr.me td{background:rgba(34,211,238,.05)}
-  tr.me td.name{color:var(--cyan);font-weight:600}
-  .best{color:var(--cyan)}
+  th{color:var(--txt3);font-weight:500;font-size:9px;text-transform:uppercase;letter-spacing:.12em;padding-top:0}
+  td{font-family:var(--mono);color:var(--txt2)}
+  td.name{font-family:var(--sans);color:var(--txt2)}
+  tr.me td{background:var(--bg-elev)}
+  tr.me td.name{color:var(--txt);font-weight:500}
+
   /* ai narrative */
-  .ai-note{background:rgba(10,16,28,.5);border-left:3px solid var(--cyan);border-radius:0 12px 12px 0;padding:14px 16px;margin-top:14px}
-  .ai-note .h{font-size:11px;color:var(--cyan);letter-spacing:.6px;margin-bottom:7px;display:flex;align-items:center;gap:6px}
-  .ai-note p{font-size:13px;line-height:1.65;color:var(--txt2)}
+  .ai-note{background:var(--bg-elev);border:1px solid var(--border);border-left:2px solid var(--accent);border-radius:0 6px 6px 0;padding:11px 14px;margin-top:14px}
+  .ai-note .h{font-size:9px;color:var(--accent);letter-spacing:.15em;margin-bottom:6px;font-weight:600;text-transform:uppercase}
+  .ai-note p{font-size:12px;line-height:1.6;color:var(--txt2)}
+
   canvas{max-width:100%}
-  .chart-box{position:relative;height:230px}
-  .radar-box{position:relative;height:300px}
+  .chart-box{position:relative;height:220px}
+  .radar-box{position:relative;height:280px}
+
+  /* unsupported feature card */
+  .unsupp{padding:20px 4px;color:var(--txt3);font-size:12px;line-height:1.6}
+  .unsupp .ttl{color:var(--txt2);font-weight:500;margin-bottom:6px;font-size:13px}
+  .unsupp .note{color:var(--txt3);font-size:10px;margin-top:6px;letter-spacing:.02em}
+
   @media(max-width:900px){
     .col-3,.col-4,.col-5,.col-6,.col-7,.col-8{grid-column:span 12}
-    .search{order:3;flex-basis:100%;max-width:none;margin-top:12px}
+    .search{order:3;flex-basis:100%;max-width:none;margin-top:10px}
+    .chead h1{font-size:30px}
+    .chead .price .v{font-size:24px}
   }
 </style>
 </head>
 <body>
 <div class="wrap">
   <header>
-    <div class="logo"><span class="dot">◈</span><span>AI Invest <b>Radar</b></span></div>
+    <div class="logo"><span class="dot">◇</span><span>AI Invest <span class="b">Radar</span></span></div>
     <div class="search">
       <span class="ic">⌕</span>
-      <input id="q" placeholder="企業名・ティッカーを入力（例: トヨタ自動車, 7203, AAPL）" value="トヨタ自動車">
-      <button onclick="analyze()">AI分析</button>
+      <input id="q" placeholder="Search company or ticker — トヨタ自動車, 7203, AAPL" value="トヨタ自動車">
+      <button onclick="analyze()">Analyze</button>
     </div>
   </header>
 
   <!-- company head -->
   <div class="chead">
-    <div class="badge" id="cBadge">7203</div>
-    <div>
+    <div class="left">
       <h1 id="cName">トヨタ自動車</h1>
-      <div class="sub" id="cSub">東証プライム ・ 輸送用機器 ・ Toyota Motor Corporation</div>
+      <span class="code" id="cBadge">7203</span>
+      <div class="sub" id="cSub">東証プライム<span>·</span>輸送用機器<span>·</span>Toyota Motor Corporation</div>
     </div>
     <div class="price">
       <div class="v" id="cPrice">¥2,847.5</div>
-      <div class="c" id="cPriceChange">▲ +42.0 (+1.50%)</div>
+      <div class="c up" id="cPriceChange">+42.0 (+1.50%)</div>
     </div>
   </div>
 
   <!-- AI verdict -->
   <div class="verdict">
-    <span class="tag" id="cVerdict">やや買い</span>
+    <span class="tag" id="cVerdict">Buy / やや買い</span>
     <span class="txt" id="cComment">財務健全性と配当の安定性は高水準。一方で成長率は業界平均並みで、株価は割安圏。AIは中長期での保有に妥当性ありと判断しています。</span>
-    <div class="score"><div class="n" id="cScore">73</div><div class="l">AI SCORE</div></div>
+    <div class="score"><span class="l">AI SCORE</span><span class="n" id="cScore">73</span></div>
   </div>
 
   <div class="grid">
     <!-- 企業概要 -->
     <div class="card col-4">
-      <h3><span class="i">◆</span>企業概要</h3>
-      <div class="mrow"><span class="k">時価総額</span><span class="v" id="cMcap">¥46.2兆</span></div>
-      <div class="mrow"><span class="k">市場区分</span><span class="v" id="cMarket">東証プライム</span></div>
+      <h3>OVERVIEW <span class="jp">企業概要</span></h3>
+      <div class="mrow"><span class="k">時価総額 / Market Cap</span><span class="v" id="cMcap">¥46.2兆</span></div>
+      <div class="mrow"><span class="k">市場区分 / Market</span><span class="v" id="cMarket">東証プライム</span></div>
       <div class="mrow"><span class="k">セクター(17)</span><span class="v" id="cSector">自動車</span></div>
       <div class="mrow"><span class="k">セクター(33)</span><span class="v" id="cSector33">輸送用機器</span></div>
-      <div class="mrow"><span class="k">決算期</span><span class="v" id="cPeriod">3Q</span></div>
+      <div class="mrow"><span class="k">決算期 / Period</span><span class="v" id="cPeriod">3Q</span></div>
     </div>
 
     <!-- 株価情報 -->
     <div class="card col-8">
-      <h3><span class="i">◆</span>株価情報 <span style="margin-left:auto;font-size:11px;color:var(--txt3)">直近12ヶ月</span></h3>
+      <h3>PRICE <span class="jp">株価情報</span><span class="meta">last 12 months</span></h3>
       <div class="chart-box"><canvas id="priceChart" role="img" aria-label="株価推移チャート"></canvas></div>
     </div>
 
     <!-- 業績推移 -->
     <div class="card col-7">
-      <h3><span class="i">◆</span>業績推移（売上高・営業利益）</h3>
+      <h3>PERFORMANCE <span class="jp">業績推移</span><span class="meta">売上高 · 営業利益</span></h3>
       <div class="chart-box"><canvas id="perfChart" role="img" aria-label="業績推移"></canvas></div>
     </div>
 
     <!-- 株価割安度 -->
     <div class="card col-5">
-      <h3><span class="i">◆</span>株価割安度（バリュエーション）</h3>
+      <h3>VALUATION <span class="jp">株価割安度</span></h3>
       <div class="tiles">
-        <div class="tile"><div class="l">PER（株価収益率）</div><div class="v"><span id="cPer">9.8</span><small>倍</small></div></div>
-        <div class="tile"><div class="l">PBR（株価純資産）</div><div class="v"><span id="cPbr">1.02</span><small>倍</small></div></div>
-        <div class="tile"><div class="l">PSR（株価売上）</div><div class="v">0.84<small>倍</small></div></div>
-        <div class="tile"><div class="l">EV/EBITDA</div><div class="v">7.1<small>倍</small></div></div>
+        <div class="tile"><div class="l">PER</div><div class="v"><span id="cPer">9.8</span><small>x</small></div></div>
+        <div class="tile"><div class="l">PBR</div><div class="v"><span id="cPbr">1.02</span><small>x</small></div></div>
+        <div class="tile"><div class="l">PSR</div><div class="v">0.84<small>x</small></div></div>
+        <div class="tile"><div class="l">EV / EBITDA</div><div class="v">7.1<small>x</small></div></div>
       </div>
-      <div class="ai-note"><div class="h">◈ AIコメント</div><p>PER・PBRともに業界平均（PER 12.5倍）を下回り、割安水準。理論株価は約¥3,180と試算され、現在値に約11%の上昇余地。</p></div>
+      <div class="ai-note"><div class="h">AI Insight</div><p>PER・PBRともに業界平均（PER 12.5倍）を下回り、割安水準。理論株価は約¥3,180と試算され、現在値に約11%の上昇余地。</p></div>
     </div>
 
     <!-- 財務健全性 -->
     <div class="card col-4">
-      <h3><span class="i">◆</span>財務健全性</h3>
+      <h3>FINANCIALS <span class="jp">財務健全性</span></h3>
       <div class="hbar"><div class="top"><span class="k">自己資本比率</span><span class="v" id="cEqRatio">38.4%</span></div><div class="track"><div class="fill" id="cEqRatioBar" style="width:77%"></div></div></div>
-      <div class="hbar"><div class="top"><span class="k">ROE（自己資本利益率）</span><span class="v" id="cRoe">11.2%</span></div><div class="track"><div class="fill" id="cRoeBar" style="width:56%"></div></div></div>
-      <div class="hbar"><div class="top"><span class="k">ROA（総資産利益率）</span><span class="v" id="cRoa">4.8%</span></div><div class="track"><div class="fill" id="cRoaBar" style="width:48%"></div></div></div>
+      <div class="hbar"><div class="top"><span class="k">ROE</span><span class="v" id="cRoe">11.2%</span></div><div class="track"><div class="fill" id="cRoeBar" style="width:56%"></div></div></div>
+      <div class="hbar"><div class="top"><span class="k">ROA</span><span class="v" id="cRoa">4.8%</span></div><div class="track"><div class="fill" id="cRoaBar" style="width:48%"></div></div></div>
       <div class="hbar"><div class="top"><span class="k">営業利益率</span><span class="v" id="cOpMargin">8.4%</span></div><div class="track"><div class="fill" id="cOpMarginBar" style="width:50%"></div></div></div>
       <div class="hbar"><div class="top"><span class="k">営業CF（兆円）</span><span class="v" id="cCfo">3.8</span></div><div class="track"><div class="fill" id="cCfoBar" style="width:70%"></div></div></div>
     </div>
 
     <!-- 配当情報 -->
     <div class="card col-4">
-      <h3><span class="i">◆</span>配当情報</h3>
+      <h3>DIVIDEND <span class="jp">配当情報</span></h3>
       <div class="tiles">
-        <div class="tile"><div class="l">配当利回り</div><div class="v up"><span id="cDivYield">2.84</span><small>%</small></div></div>
-        <div class="tile"><div class="l">1株配当（予想年間）</div><div class="v">¥<span id="cDivAnn">80</span></div></div>
+        <div class="tile"><div class="l">利回り Yield</div><div class="v up"><span id="cDivYield">2.84</span><small>%</small></div></div>
+        <div class="tile"><div class="l">年間配当 DPS</div><div class="v">¥<span id="cDivAnn">80</span></div></div>
         <div class="tile"><div class="l">配当性向</div><div class="v"><span id="cPayout">28</span><small>%</small></div></div>
-        <div class="tile"><div class="l">EPS（1株利益）</div><div class="v">¥<span id="cEps">232.5</span></div></div>
+        <div class="tile"><div class="l">EPS</div><div class="v">¥<span id="cEps">232.5</span></div></div>
       </div>
-      <div class="ai-note"><div class="h">◈ 配当ステータス</div><p id="cDivNote">配当性向に余裕があり、減配リスクは低い水準。安定したインカム狙いに適合。</p></div>
+      <div class="ai-note"><div class="h">Status</div><p id="cDivNote">配当性向に余裕があり、減配リスクは低い水準。安定したインカム狙いに適合。</p></div>
     </div>
 
     <!-- 成長性分析 -->
     <div class="card col-4">
-      <h3><span class="i">◆</span>成長性分析</h3>
-      <div class="mrow"><span class="k">売上成長率（前期比FY）</span><span class="v" id="cSalesGrowth">+6.2%</span></div>
-      <div class="mrow"><span class="k">営業利益成長率（前期比FY）</span><span class="v" id="cOpGrowth">+9.1%</span></div>
+      <h3>GROWTH <span class="jp">成長性分析</span></h3>
+      <div class="mrow"><span class="k">売上成長率 YoY</span><span class="v" id="cSalesGrowth">+6.2%</span></div>
+      <div class="mrow"><span class="k">営業利益成長率 YoY</span><span class="v" id="cOpGrowth">+9.1%</span></div>
       <div class="mrow"><span class="k">通期売上予想</span><span class="v" id="cFSales">¥50兆</span></div>
       <div class="mrow"><span class="k">当期売上累計</span><span class="v" id="cSales">¥38兆</span></div>
       <div class="mrow"><span class="k">営業利益（累計）</span><span class="v" id="cOp">¥3.2兆</span></div>
@@ -236,15 +230,15 @@
 
     <!-- AI 投資レーダーチャート -->
     <div class="card col-6">
-      <h3><span class="i">◈</span>AI投資レーダーチャート</h3>
+      <h3>RADAR <span class="jp">AI投資レーダー</span></h3>
       <div class="radar-box"><canvas id="radarChart" role="img" aria-label="AI投資レーダーチャート"></canvas></div>
     </div>
 
     <!-- 競合比較 -->
     <div class="card col-6">
-      <h3><span class="i">◆</span>競合比較 <span id="cPeerSector" style="margin-left:auto;font-size:11px;color:var(--txt3)">同業種</span></h3>
+      <h3>PEERS <span class="jp">競合比較</span><span class="meta" id="cPeerSector">同業種</span></h3>
       <table>
-        <thead><tr><th>企業</th><th>PER</th><th>ROE</th><th>配当</th><th>コード</th></tr></thead>
+        <thead><tr><th>Company</th><th>PER</th><th>ROE</th><th>Yield</th><th>Code</th></tr></thead>
         <tbody id="cPeerTbody">
           <tr class="me"><td class="name">トヨタ自動車</td><td>9.8</td><td>11.2%</td><td>2.84%</td><td>7203</td></tr>
           <tr><td class="name">ホンダ</td><td>8.1</td><td>9.8%</td><td>2.41%</td><td>7267</td></tr>
@@ -253,80 +247,80 @@
           <tr><td class="name">マツダ</td><td>8.9</td><td>8.2%</td><td>2.10%</td><td>7261</td></tr>
         </tbody>
       </table>
-      <div class="ai-note"><div class="h">◈ AI競合分析</div><p id="cPeerComment">同セクター企業との比較分析を実施中…</p></div>
+      <div class="ai-note"><div class="h">Peer Analysis</div><p id="cPeerComment">同セクター企業との比較分析を実施中…</p></div>
     </div>
 
-    <!-- ニュース（データ取得不可） -->
+    <!-- ニュース（未対応） -->
     <div class="card col-7">
-      <h3><span class="i">◆</span>ニュース ＆ AIセンチメント</h3>
-      <div style="padding:20px 4px;color:var(--txt2);font-size:13.5px;line-height:1.6">
-        <div style="color:var(--txt);font-weight:600;margin-bottom:8px;font-size:14px">📰 現在のプランではニュース取得不可</div>
-        ニュースおよびセンチメント分析機能は、別途ニュースAPI（NewsAPI、金融ニュース配信等）との連携が必要です。<br>
-        <span style="color:var(--txt3);font-size:12px">※ 将来的にNewsAPI等の外部サービス連携で実装予定</span>
+      <h3>NEWS <span class="jp">ニュース & センチメント</span></h3>
+      <div class="unsupp">
+        <div class="ttl">Not yet supported</div>
+        ニュースおよびセンチメント分析機能は、別途ニュースAPIとの連携が必要です。
+        <div class="note">Planned: NewsAPI integration</div>
       </div>
     </div>
 
-    <!-- 優待情報 + AIニュース要約（データ取得不可） -->
+    <!-- 優待 + AIニュース要約（未対応） -->
     <div class="card col-5">
-      <h3><span class="i">◆</span>株主優待</h3>
-      <div style="padding:14px 4px;color:var(--txt2);font-size:13px;line-height:1.6">
-        <div style="color:var(--txt);font-weight:600;margin-bottom:6px">🎁 優待情報の取得は未対応</div>
-        J-Quants APIには優待情報が含まれていません。<br>
-        <span style="color:var(--txt3);font-size:11px">※ 外部の優待情報サービス連携で実装予定</span>
+      <h3>SHAREHOLDER <span class="jp">株主優待</span></h3>
+      <div class="unsupp">
+        <div class="ttl">Not yet supported</div>
+        J-Quants APIには優待情報が含まれていません。
+        <div class="note">Planned: external service integration</div>
       </div>
-      <h3 style="margin-top:18px"><span class="i">◈</span>AIニュース要約</h3>
-      <div style="padding:14px 4px;color:var(--txt2);font-size:13px;line-height:1.6">
-        <div style="color:var(--txt);font-weight:600;margin-bottom:6px">📊 ニュース要約は未対応</div>
-        ニュース本文の取得が必要なため、現在のプランでは利用できません。<br>
-        <span style="color:var(--txt3);font-size:11px">※ ニュースAPI連携後に実装予定</span>
+      <h3 style="margin-top:18px">SUMMARY <span class="jp">AIニュース要約</span></h3>
+      <div class="unsupp">
+        <div class="ttl">Not yet supported</div>
+        ニュース本文の取得が必要なため、現在のプランでは利用できません。
+        <div class="note">Planned: after news API integration</div>
       </div>
     </div>
   </div>
 </div>
 
 <script>
-const cyan='#22d3ee', blue='#3b82f6', grid='rgba(120,180,255,0.08)', txt2='#8ea3c0';
-Chart.defaults.font.family="'JetBrains Mono','Outfit',sans-serif";
-Chart.defaults.color=txt2;
+const accent='#10b981', txt2='#a1a1aa', txt3='#52525b', grid='rgba(255,255,255,0.04)';
+Chart.defaults.font.family="'Inter','JetBrains Mono',sans-serif";
+Chart.defaults.font.size=11;
+Chart.defaults.color=txt3;
 
 window.priceChartRef = new Chart(document.getElementById('priceChart'),{
   type:'line',
   data:{labels:['7月','8月','9月','10月','11月','12月','1月','2月','3月','4月','5月','6月'],
     datasets:[{data:[2410,2380,2520,2490,2610,2580,2700,2680,2750,2790,2805,2847],
-      borderColor:cyan,borderWidth:2,fill:true,tension:.35,pointRadius:0,
-      backgroundColor:(c)=>{const g=c.chart.ctx.createLinearGradient(0,0,0,230);g.addColorStop(0,'rgba(34,211,238,.25)');g.addColorStop(1,'rgba(34,211,238,0)');return g}}]},
+      borderColor:'#fafafa',borderWidth:1.5,fill:true,tension:.35,pointRadius:0,
+      backgroundColor:(c)=>{const g=c.chart.ctx.createLinearGradient(0,0,0,220);g.addColorStop(0,'rgba(250,250,250,0.08)');g.addColorStop(1,'rgba(250,250,250,0)');return g}}]},
   options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
-    scales:{y:{grid:{color:grid}},x:{grid:{display:false}}}}
+    scales:{y:{grid:{color:grid,drawTicks:false},border:{display:false},ticks:{padding:8}},x:{grid:{display:false},border:{display:false},ticks:{padding:4}}}}
 });
 
 window.perfChartRef = new Chart(document.getElementById('perfChart'),{
   type:'bar',
   data:{labels:['2021','2022','2023','2024','2025'],
     datasets:[
-      {label:'売上高(兆円)',data:[27.2,31.4,37.2,45.1,48.0],backgroundColor:'rgba(59,130,246,.6)',borderRadius:5},
-      {label:'営業利益(兆円)',data:[2.2,3.0,2.7,5.3,5.1],backgroundColor:cyan,borderRadius:5}]},
+      {label:'売上高(兆円)',data:[27.2,31.4,37.2,45.1,48.0],backgroundColor:'#3a3a3a',borderRadius:2,barPercentage:.7},
+      {label:'営業利益(兆円)',data:[2.2,3.0,2.7,5.3,5.1],backgroundColor:accent,borderRadius:2,barPercentage:.7}]},
   options:{responsive:true,maintainAspectRatio:false,
-    plugins:{legend:{position:'top',labels:{boxWidth:10,boxHeight:10,usePointStyle:true,pointStyle:'rectRounded'}}},
-    scales:{y:{grid:{color:grid}},x:{grid:{display:false}}}}
+    plugins:{legend:{position:'top',align:'end',labels:{boxWidth:8,boxHeight:8,usePointStyle:true,pointStyle:'rect',padding:14,font:{size:11}}}},
+    scales:{y:{grid:{color:grid,drawTicks:false},border:{display:false},ticks:{padding:8}},x:{grid:{display:false},border:{display:false}}}}
 });
 
 window.radarChartRef = new Chart(document.getElementById('radarChart'),{
   type:'radar',
   data:{labels:['割安度','成長性','財務健全性','収益性','配当','安定性'],
-    datasets:[{label:'トヨタ',data:[78,62,82,70,76,88],
-      borderColor:cyan,backgroundColor:'rgba(34,211,238,.18)',borderWidth:2,
-      pointBackgroundColor:cyan,pointRadius:4},
-    {label:'業界平均',data:[60,65,58,60,55,62],
-      borderColor:'rgba(142,163,192,.5)',backgroundColor:'rgba(142,163,192,.08)',borderWidth:1.5,
-      pointBackgroundColor:txt2,pointRadius:3,borderDash:[5,4]}]},
+    datasets:[{label:'Company',data:[78,62,82,70,76,88],
+      borderColor:'#fafafa',backgroundColor:'rgba(250,250,250,0.06)',borderWidth:1.5,
+      pointBackgroundColor:'#fafafa',pointRadius:3},
+    {label:'業界平均 / Peers',data:[60,65,58,60,55,62],
+      borderColor:txt3,backgroundColor:'transparent',borderWidth:1,
+      pointBackgroundColor:txt3,pointRadius:2,borderDash:[3,3]}]},
   options:{responsive:true,maintainAspectRatio:false,
-    plugins:{legend:{position:'top',labels:{boxWidth:10,usePointStyle:true,pointStyle:'circle'}}},
-    scales:{r:{angleLines:{color:grid},grid:{color:grid},
-      pointLabels:{font:{size:12,family:"'Noto Sans JP',sans-serif"},color:'#e8eef9'},
+    plugins:{legend:{position:'top',align:'end',labels:{boxWidth:8,usePointStyle:true,pointStyle:'circle',padding:14,font:{size:11}}}},
+    scales:{r:{angleLines:{color:'rgba(255,255,255,0.06)'},grid:{color:'rgba(255,255,255,0.06)'},
+      pointLabels:{font:{size:11,family:"'Noto Sans JP',sans-serif"},color:txt2},
       ticks:{display:false,stepSize:20},min:0,max:100}}}
 });
 
-// 兆/億/万を自動で付ける数値整形
 function fmtJpyCompact(v){
   if (v == null || isNaN(v)) return '—';
   const abs = Math.abs(v);
@@ -355,7 +349,7 @@ async function analyze(){
 
   const btn = document.querySelector('.search button');
   const old = btn.textContent;
-  btn.textContent = '分析中…';
+  btn.textContent = 'Analyzing…';
   btn.disabled = true;
 
   try {
@@ -366,59 +360,40 @@ async function analyze(){
 
     const d = json.data, ai = json.ai;
 
-    // ヘッダー
     setText('cName', d.name);
     if (d.code) setText('cBadge', d.code.slice(0,4));
     const subParts = [d.market, d.sector33, d.nameEn].filter(Boolean);
-    if (subParts.length) setText('cSub', subParts.join(' ・ '));
+    if (subParts.length) {
+      document.getElementById('cSub').innerHTML = subParts.map(s => `<span style="margin:0 6px;color:var(--border-strong)">·</span>${s}`).join('').replace(/^<span[^>]*>·<\/span>/, '');
+    }
     if (d.price != null) setText('cPrice', '¥' + d.price.toLocaleString());
     if (d.priceChange != null && d.priceChangePct != null) {
-      const arrow = d.priceChange >= 0 ? '▲' : '▼';
       const sign = d.priceChange >= 0 ? '+' : '';
       const cls = d.priceChange >= 0 ? 'up' : 'down';
       const el = document.getElementById('cPriceChange');
       if (el) {
-        el.textContent = arrow + ' ' + sign + d.priceChange + ' (' + sign + d.priceChangePct + '%)';
-        el.style.color = d.priceChange >= 0 ? 'var(--green)' : 'var(--red)';
+        el.textContent = sign + d.priceChange + ' (' + sign + d.priceChangePct + '%)';
+        el.className = 'c ' + cls;
       }
     } else {
       setText('cPriceChange', '— (—)');
     }
 
-    // 企業概要
     setText('cMcap', d.marketCap != null ? fmtJpyCompact(d.marketCap) : '—');
     setText('cMarket', d.market || '—');
     setText('cSector', d.sector || '—');
     setText('cSector33', d.sector33 || '—');
     setText('cPeriod', d.period || '—');
 
-    // 割安度
     setText('cPer', d.per != null ? d.per : '—');
     setText('cPbr', d.pbr != null ? d.pbr : '—');
 
-    // 財務健全性
-    if (d.equityRatio != null) {
-      setText('cEqRatio', (d.equityRatio*100).toFixed(1) + '%');
-      setBar('cEqRatioBar', d.equityRatio * 100);
-    }
-    if (d.roe != null) {
-      setText('cRoe', d.roe + '%');
-      setBar('cRoeBar', d.roe * 5);
-    }
-    if (d.roa != null) {
-      setText('cRoa', d.roa + '%');
-      setBar('cRoaBar', d.roa * 8);
-    }
-    if (d.opMargin != null) {
-      setText('cOpMargin', d.opMargin + '%');
-      setBar('cOpMarginBar', d.opMargin * 3);
-    }
-    if (d.cfo != null) {
-      setText('cCfo', (d.cfo/1e12).toFixed(2));
-      setBar('cCfoBar', Math.log10(Math.max(1, d.cfo/1e9)) * 20);
-    }
+    if (d.equityRatio != null) { setText('cEqRatio', (d.equityRatio*100).toFixed(1) + '%'); setBar('cEqRatioBar', d.equityRatio * 100); }
+    if (d.roe != null) { setText('cRoe', d.roe + '%'); setBar('cRoeBar', d.roe * 5); }
+    if (d.roa != null) { setText('cRoa', d.roa + '%'); setBar('cRoaBar', d.roa * 8); }
+    if (d.opMargin != null) { setText('cOpMargin', d.opMargin + '%'); setBar('cOpMarginBar', d.opMargin * 3); }
+    if (d.cfo != null) { setText('cCfo', (d.cfo/1e12).toFixed(2)); setBar('cCfoBar', Math.log10(Math.max(1, d.cfo/1e9)) * 20); }
 
-    // 配当
     setText('cDivYield', d.divYield != null ? d.divYield : '—');
     setText('cDivAnn', d.divAnn != null ? d.divAnn : '—');
     setText('cPayout', d.payoutRatio != null ? d.payoutRatio : '—');
@@ -431,37 +406,30 @@ async function analyze(){
       setText('cDivNote', note);
     }
 
-    // 成長性
-    setText('cSalesGrowth', d.salesGrowth != null ? fmtPct(d.salesGrowth, true) : '—（過去FYデータ不足）');
-    setText('cOpGrowth', d.opGrowth != null ? fmtPct(d.opGrowth, true) : '—（過去FYデータ不足）');
+    setText('cSalesGrowth', d.salesGrowth != null ? fmtPct(d.salesGrowth, true) : '—');
+    setText('cOpGrowth', d.opGrowth != null ? fmtPct(d.opGrowth, true) : '—');
     setText('cFSales', d.fSales != null ? fmtJpyCompact(d.fSales) : '—');
     setText('cSales', d.sales != null ? fmtJpyCompact(d.sales) : '—');
     setText('cOp', d.op != null ? fmtJpyCompact(d.op) : '—');
 
-    // AI判定
-    const verdictMap = { strong_buy:'強い買い', buy:'やや買い', hold:'中立', sell:'やや売り', strong_sell:'売り' };
+    const verdictMap = { strong_buy:'Strong Buy / 強い買い', buy:'Buy / やや買い', hold:'Hold / 中立', sell:'Sell / やや売り', strong_sell:'Strong Sell / 売り' };
     setText('cVerdict', verdictMap[ai.verdict] || ai.verdict || '—');
     setText('cComment', ai.comment || '—');
     setText('cScore', ai.ai_score != null ? ai.ai_score : '—');
 
-    // レーダーチャート
     if (window.radarChartRef && ai.radar) {
       const r = ai.radar;
-      window.radarChartRef.data.datasets[0].data = [
-        r.valuation, r.growth, r.financial, r.profitability, r.dividend, r.stability
-      ];
-      window.radarChartRef.data.datasets[0].label = d.name || 'AI分析';
+      window.radarChartRef.data.datasets[0].data = [r.valuation, r.growth, r.financial, r.profitability, r.dividend, r.stability];
+      window.radarChartRef.data.datasets[0].label = d.name || 'Company';
       window.radarChartRef.update();
     }
 
-    // 株価推移チャート（実データ）
     if (window.priceChartRef && d.priceHistory && d.priceHistory.length) {
       window.priceChartRef.data.labels = d.priceHistory.map(p => p.month.slice(5) + '月');
       window.priceChartRef.data.datasets[0].data = d.priceHistory.map(p => p.close);
       window.priceChartRef.update();
     }
 
-    // 業績推移チャート（実データ）
     if (window.perfChartRef && d.perfHistory && d.perfHistory.length) {
       window.perfChartRef.data.labels = d.perfHistory.map(p => p.year || '');
       window.perfChartRef.data.datasets[0].data = d.perfHistory.map(p => p.sales ? p.sales/1e12 : 0);
@@ -469,19 +437,16 @@ async function analyze(){
       window.perfChartRef.update();
     }
 
-    // 競合比較テーブル
     const tbody = document.getElementById('cPeerTbody');
     if (tbody) {
       const fmtVal = v => v == null ? '—' : v;
       const fmtPctVal = v => v == null ? '—' : v + '%';
       const rows = [];
-      // 自社を最上段に
       rows.push('<tr class="me"><td class="name">' + (d.name || '—') + '</td>' +
         '<td>' + fmtVal(d.per) + '</td>' +
         '<td>' + fmtPctVal(d.roe) + '</td>' +
-        '<td class="best">' + fmtPctVal(d.divYield) + '</td>' +
+        '<td>' + fmtPctVal(d.divYield) + '</td>' +
         '<td>' + (d.code ? d.code.slice(0,4) : '—') + '</td></tr>');
-      // 競合
       if (d.peers && d.peers.length) {
         for (const p of d.peers) {
           rows.push('<tr><td class="name">' + p.name + '</td>' +
@@ -491,7 +456,7 @@ async function analyze(){
             '<td>' + (p.code ? p.code.slice(0,4) : '—') + '</td></tr>');
         }
       } else {
-        rows.push('<tr><td colspan="5" style="text-align:center;color:var(--txt3);padding:14px">同セクター企業データなし</td></tr>');
+        rows.push('<tr><td colspan="5" style="text-align:center;color:var(--txt3);padding:14px">No peer data</td></tr>');
       }
       tbody.innerHTML = rows.join('');
     }

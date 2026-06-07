@@ -323,7 +323,7 @@ window.radarChartRef = new Chart(document.getElementById('radarChart'),{
 function fmtJpyCompact(v){
   if (v == null || isNaN(v)) return '—';
   const abs = Math.abs(v);
-  if (abs >= 1e12) return '¥' + (v/1e12).toFixed(2) + '兆';
+  if (abs >= 1e8) return '¥' + (v/1e8).toFixed(2) + '兆';
   if (abs >= 1e8) return '¥' + (v/1e8).toFixed(1) + '億';
   if (abs >= 1e4) return '¥' + (v/1e4).toFixed(1) + '万';
   return '¥' + Math.round(v).toLocaleString();
@@ -391,7 +391,7 @@ async function analyze(){
     if (d.roe != null) { setText('cRoe', d.roe + '%'); setBar('cRoeBar', d.roe * 5); }
     if (d.roa != null) { setText('cRoa', d.roa + '%'); setBar('cRoaBar', d.roa * 8); }
     if (d.opMargin != null) { setText('cOpMargin', d.opMargin + '%'); setBar('cOpMarginBar', d.opMargin * 3); }
-    if (d.cfo != null) { setText('cCfo', (d.cfo/1e12).toFixed(2)); setBar('cCfoBar', Math.log10(Math.max(1, d.cfo/1e9)) * 20); }
+    if (d.cfo != null) { setText('cCfo', (d.cfo/1e8).toFixed(2)); setBar('cCfoBar', Math.log10(Math.max(1, d.cfo/1e9)) * 20); }
 
     setText('cDivYield', d.divYield != null ? d.divYield : '—');
     setText('cDivAnn', d.divAnn != null ? d.divAnn : '—');
@@ -431,8 +431,8 @@ async function analyze(){
 
     if (window.perfChartRef && d.perfHistory && d.perfHistory.length) {
       window.perfChartRef.data.labels = d.perfHistory.map(p => p.year || '');
-      window.perfChartRef.data.datasets[0].data = d.perfHistory.map(p => p.sales ? p.sales/1e12 : 0);
-      window.perfChartRef.data.datasets[1].data = d.perfHistory.map(p => p.op ? p.op/1e12 : 0);
+      window.perfChartRef.data.datasets[0].data = d.perfHistory.map(p => p.sales ? p.sales/1e8 : 0);
+      window.perfChartRef.data.datasets[1].data = d.perfHistory.map(p => p.op ? p.op/1e8: 0);
       window.perfChartRef.update();
     }
 

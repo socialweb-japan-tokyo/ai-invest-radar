@@ -151,20 +151,20 @@
   <div class="chead">
     <div class="badge">7203</div>
     <div>
-      <h1>トヨタ自動車</h1>
+      <h1 id="cName">トヨタ自動車</h1>
       <div class="sub">東証プライム ・ 輸送用機器 ・ Toyota Motor Corporation</div>
     </div>
     <div class="price">
-      <div class="v">¥2,847.5</div>
+      <div class="v" id="cPrice">¥2,847.5</div>
       <div class="c">▲ +42.0 (+1.50%)</div>
     </div>
   </div>
 
   <!-- AI verdict -->
   <div class="verdict">
-    <span class="tag">やや買い</span>
-    <span class="txt">財務健全性と配当の安定性は高水準。一方で成長率は業界平均並みで、株価は割安圏。AIは中長期での保有に妥当性ありと判断しています。</span>
-    <div class="score"><div class="n">73</div><div class="l">AI SCORE</div></div>
+    <span class="tag" id="cVerdict">やや買い</span>
+    <span class="txt" id="cComment">財務健全性と配当の安定性は高水準。一方で成長率は業界平均並みで、株価は割安圏。AIは中長期での保有に妥当性ありと判断しています。</span>
+    <div class="score"><div class="n" id="cScore">73</div><div class="l">AI SCORE</div></div>
   </div>
 
   <div class="grid">
@@ -194,8 +194,8 @@
     <div class="card col-5">
       <h3><span class="i">◆</span>株価割安度（バリュエーション）</h3>
       <div class="tiles">
-        <div class="tile"><div class="l">PER（株価収益率）</div><div class="v">9.8<small>倍</small></div></div>
-        <div class="tile"><div class="l">PBR（株価純資産）</div><div class="v">1.02<small>倍</small></div></div>
+        <div class="tile"><div class="l">PER（株価収益率）</div><div class="v"><span id="cPer">9.8</span><small>倍</small></div></div>
+        <div class="tile"><div class="l">PBR（株価純資産）</div><div class="v"><span id="cPbr">1.02</span><small>倍</small></div></div>
         <div class="tile"><div class="l">PSR（株価売上）</div><div class="v">0.84<small>倍</small></div></div>
         <div class="tile"><div class="l">EV/EBITDA</div><div class="v">7.1<small>倍</small></div></div>
       </div>
@@ -205,7 +205,7 @@
     <!-- 財務健全性 -->
     <div class="card col-4">
       <h3><span class="i">◆</span>財務健全性</h3>
-      <div class="hbar"><div class="top"><span class="k">自己資本比率</span><span class="v">38.4%</span></div><div class="track"><div class="fill" style="width:77%"></div></div></div>
+      <div class="hbar"><div class="top"><span class="k">自己資本比率</span><span class="v" id="cEqRatio">38.4%</span></div><div class="track"><div class="fill" style="width:77%"></div></div></div>
       <div class="hbar"><div class="top"><span class="k">流動比率</span><span class="v">122%</span></div><div class="track"><div class="fill" style="width:68%"></div></div></div>
       <div class="hbar"><div class="top"><span class="k">D/Eレシオ</span><span class="v">0.62</span></div><div class="track"><div class="fill" style="width:62%"></div></div></div>
       <div class="hbar"><div class="top"><span class="k">ROE</span><span class="v">11.2%</span></div><div class="track"><div class="fill" style="width:56%"></div></div></div>
@@ -216,7 +216,7 @@
     <div class="card col-4">
       <h3><span class="i">◆</span>配当情報</h3>
       <div class="tiles">
-        <div class="tile"><div class="l">配当利回り</div><div class="v up">2.84<small>%</small></div></div>
+        <div class="tile"><div class="l">配当利回り</div><div class="v up"><span id="cDivYield">2.84</span><small>%</small></div></div>
         <div class="tile"><div class="l">1株配当</div><div class="v">¥80</div></div>
         <div class="tile"><div class="l">配当性向</div><div class="v">28<small>%</small></div></div>
         <div class="tile"><div class="l">連続増配</div><div class="v">5<small>年</small></div></div>
@@ -304,7 +304,7 @@ new Chart(document.getElementById('perfChart'),{
     scales:{y:{grid:{color:grid}},x:{grid:{display:false}}}}
 });
 
-new Chart(document.getElementById('radarChart'),{
+window.radarChartRef = new Chart(document.getElementById('radarChart'),{
   type:'radar',
   data:{labels:['割安度','成長性','財務健全性','収益性','配当','安定性'],
     datasets:[{label:'トヨタ',data:[78,62,82,70,76,88],
@@ -320,9 +320,47 @@ new Chart(document.getElementById('radarChart'),{
       ticks:{display:false,stepSize:20},min:0,max:100}}}
 });
 
-function analyze(){
-  const q=document.getElementById('q').value;
-  alert('「'+q+'」をAI分析します。\\n\\n（プロトタイプ：実際の本番版ではここでAPIから企業データを取得し、AIが分析を生成します）');
+async function analyze(){
+  const q = document.getElementById('q').value.trim();
+  const codeMap = { 'トヨタ自動車':'72030', 'トヨタ':'72030', '7203':'72030' };
+  const code = codeMap[q] || (q.match(/^\d{4,5}$/) ? (q.length===4 ? q+'0' : q) : '72030');
+
+  const btn = document.querySelector('.search button');
+  const old = btn.textContent;
+  btn.textContent = '分析中…';
+  btn.disabled = true;
+
+  try {
+    const res = await fetch('/api/analyze?code=' + code);
+    const json = await res.json();
+    if (!json.data || !json.ai) throw new Error('データ取得失敗');
+
+    const d = json.data, ai = json.ai;
+    if (q) document.getElementById('cName').textContent = q;
+    if (d.price) document.getElementById('cPrice').textContent = '¥' + d.price.toLocaleString();
+    if (d.per != null) document.getElementById('cPer').textContent = d.per;
+    if (d.pbr != null) document.getElementById('cPbr').textContent = d.pbr;
+    if (d.divYield != null) document.getElementById('cDivYield').textContent = d.divYield;
+    if (d.equityRatio != null) document.getElementById('cEqRatio').textContent = (d.equityRatio*100).toFixed(1) + '%';
+
+    const verdictMap = { strong_buy:'強い買い', buy:'やや買い', hold:'中立', sell:'やや売り', strong_sell:'売り' };
+    if (ai.verdict) document.getElementById('cVerdict').textContent = verdictMap[ai.verdict] || ai.verdict;
+    if (ai.comment) document.getElementById('cComment').textContent = ai.comment;
+    if (ai.ai_score != null) document.getElementById('cScore').textContent = ai.ai_score;
+
+    if (window.radarChartRef && ai.radar) {
+      const r = ai.radar;
+      window.radarChartRef.data.datasets[0].data = [
+        r.valuation, r.growth, r.financial, r.profitability, r.dividend, r.stability
+      ];
+      window.radarChartRef.update();
+    }
+  } catch (e) {
+    alert('分析エラー: ' + e.message);
+  } finally {
+    btn.textContent = old;
+    btn.disabled = false;
+  }
 }
 document.getElementById('q').addEventListener('keydown',e=>{if(e.key==='Enter')analyze()});
 </script>

@@ -328,7 +328,8 @@ function fmtJpyCompact(v){
   if (abs >= 100) return '¥' + Math.round(oku).toLocaleString() + '億';
   if (abs >= 1) return '¥' + oku.toFixed(1) + '億';
   return '¥' + Math.round(v).toLocaleString() + '円';
-}function fmtPct(v, plus){
+}
+  function fmtPct(v, plus){
   if (v == null || isNaN(v)) return '—';
   const sign = (plus && v > 0) ? '+' : '';
   return sign + v.toFixed(2) + '%';

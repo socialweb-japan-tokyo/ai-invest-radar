@@ -325,7 +325,7 @@ function fmtJpyCompact(v){
   const oku = v / 1e8;
   const abs = Math.abs(oku);
   if (abs >= 10000) return '¥' + Math.round(oku).toLocaleString() + '億';  // 1兆以上も億表記
-  if (abs >= 100) return '¥' + Math.round(oku).toLocaleString() + '兆';
+  if (abs >= 100) return '¥' + Math.round(oku).toLocaleString() + '億';
   if (abs >= 1) return '¥' + oku.toFixed(1) + '億';
   return '¥' + Math.round(v).toLocaleString() + '円';
 }
